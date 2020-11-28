@@ -47,8 +47,9 @@
             striped
             hover
             fixed
-            :items="results.items"
+            :items="GET_USERS"
             :fields="results.fields"
+            @row-clicked="handleClick"
           ></b-table>
         </div>
       </transition>
@@ -57,6 +58,8 @@
 </template>
 
 <script>
+import { mapActions, mapGetters } from "vuex";
+
 export default {
   name: "Search",
 
@@ -67,51 +70,28 @@ export default {
 
       results: {
         fields: [
-          { key: "workers", label: "Сотрудники" },
-          { key: "articlesCount", label: "Кол-во статей" },
-          { key: "citationsCount", label: "Кол-во цитирований" },
-          { key: "indexHirsch", label: "Индекс Хирша" },
-        ],
-
-        items: [
-          {
-            workers: "Митрохин Максим Александрович ",
-            articlesCount: 291,
-            citationsCount: 2939,
-            indexHirsch: 1695,
-          },
-          {
-            workers: "Митрохина Наталья Юрьевна",
-            articlesCount: 10,
-            citationsCount: 158,
-            indexHirsch: 106,
-          },
-          {
-            workers: "Митрошин Олег Юрьевич",
-            articlesCount: 2,
-            citationsCount: 36,
-            indexHirsch: 36,
-          },
-          {
-            workers: "Валовик Дмитрий Викторович",
-            articlesCount: 1,
-            citationsCount: 10,
-            indexHirsch: 10,
-          },
-          {
-            workers: "Первый проректор",
-            articlesCount: 2,
-            citationsCount: 6,
-            indexHirsch: 6,
-          },
+          { key: "name", label: "Сотрудники" },
+          { key: "count", label: "Кол-во статей" },
+          { key: "cit", label: "Кол-во цитирований" },
+          { key: "hirsh", label: "Индекс Хирша" },
         ],
       },
     };
   },
 
+  computed: {
+    ...mapGetters(["GET_USERS"]),
+  },
+
   methods: {
+    ...mapActions(["FETCH_USERS"]),
     change(value) {
-      this.showResults = !!value.trim();
+      this.FETCH_USERS(value).then(() => {
+        this.showResults = !!value.trim();
+      });
+    },
+    handleClick(item) {
+      this.$router.push(`/worker/${item.id}`);
     },
   },
 };

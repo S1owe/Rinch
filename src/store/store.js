@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import { loginUser, logoutUser, checkUser } from '../services/authService';
+import searchUser from '../services/searchService';
 
 Vue.use(Vuex);
 
@@ -9,10 +10,14 @@ const store = new Vuex.Store({
     user: {
       token: localStorage.getItem('token') || '',
     },
+    users: [],
   },
   mutations: {
     SET_USER: (state, user) => {
       state.user = user;
+    },
+    SET_USERS: (state, users) => {
+      state.users = users;
     }
   },
   actions: {
@@ -36,11 +41,21 @@ const store = new Vuex.Store({
         return checkUser(state.user.token)
       else
         return false;
+    },
+    FETCH_USERS({ commit }, query) {
+      return searchUser(query)
+        .then(res => {
+          commit('SET_USERS', res);
+          return res;
+        });
     }
   },
   getters: {
     GET_USER({ user }) {
       return user;
+    },
+    GET_USERS({ users }) {
+      return users;
     }
   }
 });
