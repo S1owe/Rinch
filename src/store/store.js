@@ -4,6 +4,7 @@ import { loginUser, logoutUser, checkUser } from '../services/authService';
 import searchUser from '../services/searchService';
 import { getWorker, getPublicationsTypes } from '../services/workerService';
 import getDepartments from '../services/mainService';
+import { getGraph, getUsersArticles } from '../services/graphService';
 
 Vue.use(Vuex);
 
@@ -31,7 +32,7 @@ const store = new Vuex.Store({
     },
     SET_DEPARTS: (state, departs) => {
       state.departs = departs;
-    }
+    },
   },
   actions: {
     LOGIN_USER({ commit }, { login, password }) {
@@ -77,7 +78,15 @@ const store = new Vuex.Store({
         commit('SET_DEPARTS', res);
         return res;
       });
-    }
+    },
+    FETCH_GRAPH() {
+      return getGraph();
+    },
+    // eslint-disable-next-line
+    FETCH_USER_ARTICLES({ commit }, user_1, user_2) {
+      return getUsersArticles(user_1, user_2);
+    },
+    FETCH_ACTIVITY_DATA() {}
   },
   getters: {
     GET_USER({ user }) {

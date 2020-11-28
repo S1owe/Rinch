@@ -167,8 +167,8 @@ export default {
     topics() {
       return [
         { count: +this.GET_WORKER.count, name: "Всего статей" },
-        { count: this.GET_WORKER.cit, name: "Кол-во цитирований" },
-        { count: this.GET_WORKER.hirsh, name: "Индекс Хирша" },
+        { count: +this.GET_WORKER.cit, name: "Кол-во цитирований" },
+        { count: +this.GET_WORKER.hirsh, name: "Индекс Хирша" },
       ];
     },
     getFillter() {
