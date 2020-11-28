@@ -60,6 +60,9 @@
                   </td>
                 </tr>
               </table>
+              <span class="title text-right" style="font-size: 12px; cursor: pointer; display: block; margin-top: 10px;"
+                    v-if="!is_include_current_author"
+                    @click="add_current_author">Добавить меня</span>
             </div>
           </transition>
         </div>
@@ -127,10 +130,25 @@ export default {
         {id: 6, name: 'Митрохин Михаил Александрович', rating: 54}
       ],
       count_authors: 0,
-      search_authors: ''
+      search_authors: '',
+      this_author: {id: 9, name: 'Текущий автор', rating: 46},
+      is_include_current_author: false
+    }
+  },
+  watch: {
+    is_search_manual: function () {
+      this.is_include_current_author =
+          !(this.search_table_users.findIndex(s => s.id === this.this_author.id) === -1 &&
+          this.result_command.findIndex(s => s.id === this.this_author.id) === -1);
     }
   },
   methods: {
+    add_current_author() {
+      if (this.is_include_current_author)
+        return;
+      this.is_include_current_author = true;
+      this.search_table_users.push(this.this_author);
+    },
     send: function () {
       this.$emit('send', {
         name: this.name,
