@@ -44,6 +44,12 @@ export default {
         return Promise.reject(error);
       }
     );
+
+    this.CHECK_USER(this.GET_USER.token).then((res) => {
+      if (!res && !res?.data?.auth && !this.isAuth) {
+        this.$router.push({ name: "auth" });
+      }
+    });
   },
 };
 </script>
