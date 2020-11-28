@@ -163,7 +163,7 @@ export default {
         console.log(this.filterMas.page);
 
         this.filter.types_of_publication = this.filterMas.types_of_publication;
-        this.filter.selected = this.filterMas.types_of_publication;
+        this.filter.selected = [...this.filterMas.types_of_publication];
 
         if (this.filterMas.page === 'graph') {
             this.filter.unit_types_of_publication = this.filterMas.unit_types_of_publication;
