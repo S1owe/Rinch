@@ -61,14 +61,14 @@
         <select v-model="filter.type_graph">
           <option value="pie">Круговая диаграмма</option>
           <option value="bar">Столбчатая диаграмма</option>
-          <option value="line">Линейная диаграмма</option>
+<!--          <option value="line">Линейная диаграмма</option>-->
          <!-- <option value="horizontalBar">Полосовая диаграмма</option>
           <option value="polarArea">Фигурная диаграмма</option>-->
         </select>
       </div>
     </div>
 
-    <div class="unit_container" v-if="filterMas.page === 'graph'">
+    <!--<div class="unit_container" v-if="filterMas.page === 'graph'">
       <div class="filter_title">Выберите подразделения:</div>
 
       <div class="filter_third_container" v-bind:class="{ filter_padding: filter.unit_filter_subdivision_show}">
@@ -103,7 +103,7 @@
 
       <div class="filter_btn_show_all" :class="{active: filter.unit_filter_subdivision_show}" @click="subdivisionUnit_show()"><a>{{filter.unit_btn_show_text}}</a></div>
 
-    </div>
+    </div>-->
 
     <div class="btn_update_filter" @click="updateFilter">Обновить</div>
 
@@ -118,6 +118,7 @@ export default {
   name: "FilterComponent",
   props: {
       filterMas: Object,   // page: employee - стр. сотр. graph - стр. графа, unit - стр. подразделений
+    types: Array
   },
 
   data() {
@@ -162,8 +163,8 @@ export default {
 
         console.log(this.filterMas.page);
 
-        this.filter.types_of_publication = this.filterMas.types_of_publication;
-        this.filter.selected = [...this.filterMas.types_of_publication];
+        this.filter.types_of_publication = this.types.map(t => t.label);
+        this.filter.selected = this.types.map(t => t.label);
 
         if (this.filterMas.page === 'graph') {
             this.filter.unit_types_of_publication = this.filterMas.unit_types_of_publication;
@@ -187,6 +188,11 @@ export default {
                 this.$emit('typechart', this.filter.type_graph)
             }
 
+            this.$emit('set_new_types', {
+              data: this.filter.selected,
+              date_first: this.filter.date_first,
+              date_second: this.filter.date_second,
+            });
 
         },
         // выбрать все / снять выделения "выбрать все"

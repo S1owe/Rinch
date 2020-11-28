@@ -33,7 +33,7 @@
                 </div>
             </div>
 
-            <FilterComponent @typechart="chartType" :filterMas="filter"></FilterComponent>
+            <FilterComponent @typechart="chartType" @set_new_types="set_new_types" :types="types" :filterMas="filter"></FilterComponent>
         </div>
     </div>
 </template>
@@ -42,11 +42,17 @@
     import FilterComponent from '../components/FilterComponent';
     import Chart from 'vue-chartless';
     import TrendChart from "vue-trend-chart";
+    import http from "@/services/httpService";
 
     export default {
         name: "graph",
         data() {
             return {
+              types: [],
+              typesAll:[],
+
+
+
                 allPublications: 0,
                 showGraph: true,
                 filter: {
@@ -109,7 +115,22 @@
         },
 
         created() {
+          http.post('api/api.php', {
+            module: 'get_articles_types'
+          }).then(response => {
+            this.typesAll = response.data.types;
+          });
 
+          http.post('api/api.php', {
+            module: 'graph'
+          }).then(response => {
+            this.types = response.data.graph.map(g => {
+              return {
+                label: g.type,
+                value: g.cn
+              }
+            });
+          });
         },
 
         watch: {
@@ -117,6 +138,10 @@
         },
 
         methods: {
+          set_new_types(data) {
+            console.log("Number: ");
+            console.log(data);
+          },
             chartType(data) {
                 this.def.type = data;
                 
