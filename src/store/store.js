@@ -3,6 +3,7 @@ import Vuex from 'vuex';
 import { loginUser, logoutUser, checkUser } from '../services/authService';
 import searchUser from '../services/searchService';
 import { getWorker, getPublicationsTypes } from '../services/workerService';
+import getDepartments from '../services/mainService';
 
 Vue.use(Vuex);
 
@@ -13,6 +14,7 @@ const store = new Vuex.Store({
     },
     users: [],
     worker: {},
+    departs: [],
   },
   mutations: {
     SET_USER: (state, user) => {
@@ -26,6 +28,9 @@ const store = new Vuex.Store({
     },
     CLEAR_WORKER: (state) => {
       state.worker = {};
+    },
+    SET_DEPARTS: (state, departs) => {
+      state.departs = departs;
     }
   },
   actions: {
@@ -66,6 +71,12 @@ const store = new Vuex.Store({
     },
     FETCH_PUB_TYPES() {
       return getPublicationsTypes();
+    },
+    FETCH_DEPARTS({ commit }) {
+      return getDepartments().then((res) => {
+        commit('SET_DEPARTS', res);
+        return res;
+      });
     }
   },
   getters: {
@@ -78,6 +89,9 @@ const store = new Vuex.Store({
     GET_WORKER({ worker }) {
       return worker;
     },
+    GET_DEPARTS({ departs }) {
+      return departs;
+    }
   }
 });
 
