@@ -227,7 +227,6 @@ export default {
 <style lang="scss" scoped>
 .team {
   box-sizing: border-box;
-  padding-bottom: 108px;
 
   &__header {
     padding: 70px 120px 56px 120px;
@@ -362,6 +361,10 @@ export default {
 
   &__history {
     width: 1150px;
+  }
+
+  &__network {
+    padding-top: 56px;
   }
 
   &__network-title {

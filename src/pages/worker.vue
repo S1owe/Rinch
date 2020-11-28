@@ -242,7 +242,7 @@ export default {
   }
 
   &__researchs {
-    padding: 74px 120px 180px 120px;
+    padding: 74px 120px 74px 120px;
     display: flex;
     flex-direction: column;
     align-items: center;
