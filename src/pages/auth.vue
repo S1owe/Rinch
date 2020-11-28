@@ -283,6 +283,7 @@
 
 <script>
 import Logo from "../components/Logo";
+import { mapActions, mapGetters } from "vuex";
 
 export default {
   name: "Auth",
@@ -296,9 +297,18 @@ export default {
     };
   },
 
+  computed: {
+    ...mapGetters(["GET_USER"]),
+  },
+
   methods: {
+    ...mapActions(["LOGIN_USER"]),
+
     handleSubmit() {
-      console.log(this.login, this.password, this.rememberMe);
+      this.LOGIN_USER({
+        login: this.login,
+        password: this.password,
+      }).then(() => this.$router.push("/"));
     },
   },
 };

@@ -59,6 +59,7 @@
 
 <script>
 import Logo from "./Logo";
+import { mapActions } from "vuex";
 
 export default {
   name: "Header",
@@ -89,8 +90,11 @@ export default {
   },
 
   methods: {
+    ...mapActions(["LOGOUT_USER"]),
     logout() {
-      console.log("logout click!");
+      this.LOGOUT_USER().then(() => {
+        this.$router.push({ name: "auth" });
+      });
     },
   },
 };
