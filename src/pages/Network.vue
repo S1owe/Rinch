@@ -7,7 +7,7 @@
                     :nodes="nodes"
                     :edges="edges"
                     :options="options"
-                    @select-node="networkEvent('selectNode')"
+                    @select-edge="networkEvent()"
                     @click="onNodeSelected($event)"
             >
                 >
@@ -32,7 +32,7 @@
 
 
             <div class="main__table">
-               <div class="headerTable">
+               <div class="headerTable" :class="(table.items.length > 8)?'headerTablePadding':''">
                    <div class="item" v-for="(item, i) in table.fields" :key="'table_h_' + i">{{item.label}}</div>
                </div>
                 <div class="contentTable">
@@ -59,7 +59,7 @@
         name: "Network",
         data() {
             return {
-                statusModal: true,
+                statusModal: false,
 
                 author: [
                     {name: 'Митрохин Максим Александрович', rank: 'к.т.н., доцент'},
@@ -194,10 +194,10 @@
                 ],
                 options: {
                     nodes: {
-                        borderWidth: 2
+                        borderWidth: 2,
                     },
                     edges: {
-                        color: '#2F73EA'
+                        color: '#2F73EA',
                     }
                 }
             }
@@ -209,7 +209,7 @@
         },
 
         created() {
-
+            
         },
 
         watch: {
@@ -233,15 +233,10 @@
 
             onNodeSelected(a) {
                 console.log(a);
+            },
+
+            networkEvent() {
                 this.statusModal = true;
-            },
-
-            onNodeHovered() {
-                console.log('sdgsd');
-            },
-
-            networkEvent(a) {
-                console.log(a);
             }
 
         },
@@ -360,6 +355,10 @@
                 width: 25%;
                 text-align: center;
             }
+        }
+
+        .headerTablePadding {
+            padding-right: calc(40px + 18px);
         }
 
         .contentTable {
