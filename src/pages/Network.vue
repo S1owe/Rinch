@@ -7,7 +7,7 @@
                     :nodes="nodes"
                     :edges="edges"
                     :options="options"
-                    @select-node="networkEvent('selectNode')"
+                    @select-edge="networkEvent()"
                     @click="onNodeSelected($event)"
             >
                 >
@@ -32,7 +32,7 @@
 
 
             <div class="main__table">
-               <div class="headerTable">
+               <div class="headerTable" :class="(table.items.length > 8)?'headerTablePadding':''">
                    <div class="item" v-for="(item, i) in table.fields" :key="'table_h_' + i">{{item.label}}</div>
                </div>
                 <div class="contentTable">
@@ -59,7 +59,7 @@
         name: "Network",
         data() {
             return {
-                statusModal: true,
+                statusModal: false,
 
                 author: [
                     {name: 'Митрохин Максим Александрович', rank: 'к.т.н., доцент'},
@@ -77,37 +77,73 @@
                     items: [
                         {
                             number: 1,
-                            title: 'Semisupervised learning in pattern recognitio...',
-                            date: 2939,
+                            title: 'Semisupervised learning in pattern recognitio',
+                            date: '21.01.20',
                             citations: 1695,
                         },
                         {
                             number: 2,
-                            title: 'Formalization of Organization of Signaling Pr...',
+                            title: 'Formalization of Organization of Signaling Pr',
                             date: '01.01.20',
                             citations: 106,
                         },
                         {
                             number: 3,
-                            title: 'Deep learning approach for QRS wave detection...',
+                            title: 'Deep learning approach for QRS wave detection',
                             date: '10.02.20',
                             citations: 36,
                         },
                         {
                             number: 4,
-                            title: 'Investigation of models for prognosis of crit...',
+                            title: 'Investigation of models for prognosis of critir of models for prognosis 1421',
                             date: '06.03.20',
                             citations: 10,
                         },
                         {
                             number: 5,
-                            title: 'Use of the mass service theory elements while...',
+                            title: 'Use of the mass service theory elements while',
                             date: '03.03.20',
                             citations: 6,
                         },
                         {
                             number: 6,
-                            title: 'Semisupervised learning in pattern recognitio...',
+                            title: 'Semisupervised learning in pattern recognitio',
+                            date: '01.04.20',
+                            citations: 3,
+                        },
+                        {
+                            number: 1,
+                            title: 'Semisupervised learning in pattern recognitio',
+                            date: '21.01.20',
+                            citations: 1695,
+                        },
+                        {
+                            number: 2,
+                            title: 'Formalization of Organization of Signaling Pr',
+                            date: '01.01.20',
+                            citations: 106,
+                        },
+                        {
+                            number: 3,
+                            title: 'Deep learning approach for QRS wave detection',
+                            date: '10.02.20',
+                            citations: 36,
+                        },
+                        {
+                            number: 4,
+                            title: 'Investigation of models for prognosis of critir of models for prognosis 1421',
+                            date: '06.03.20',
+                            citations: 10,
+                        },
+                        {
+                            number: 5,
+                            title: 'Use of the mass service theory elements while',
+                            date: '03.03.20',
+                            citations: 6,
+                        },
+                        {
+                            number: 6,
+                            title: 'Semisupervised learning in pattern recognitio',
                             date: '01.04.20',
                             citations: 3,
                         },
@@ -158,10 +194,10 @@
                 ],
                 options: {
                     nodes: {
-                        borderWidth: 2
+                        borderWidth: 2,
                     },
                     edges: {
-                        color: '#2F73EA'
+                        color: '#2F73EA',
                     }
                 }
             }
@@ -173,7 +209,7 @@
         },
 
         created() {
-
+            
         },
 
         watch: {
@@ -183,11 +219,12 @@
         methods: {
 
             removeTitle(title) {
-            /*  if (this.title.length > 20) {
-                   
-               }   */
+              if (title.length > 50) {
+                  return (title.substr(0, 50) + '...')
+              } else {
+                  return title
+              }
 
-               return title
             },
 
             closeModal() {
@@ -196,15 +233,10 @@
 
             onNodeSelected(a) {
                 console.log(a);
+            },
+
+            networkEvent() {
                 this.statusModal = true;
-            },
-
-            onNodeHovered() {
-                console.log('sdgsd');
-            },
-
-            networkEvent(a) {
-                console.log(a);
             }
 
         },
@@ -226,16 +258,16 @@
     }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 
     $text_color: #2F73EA;
 
     .wrapper{
-        min-height: 100vh;
+        min-height: 85vh;
         border: 1px solid black;
         background-color: #fff;
         padding: 10px;
-        height: 100vh;
+        height: 85vh;
     }
     #network {
         padding: 70px 120px;
@@ -260,7 +292,7 @@
         background-color: #F9F9FA;
         border: 2px solid #E5E7E9;
         transition: 0.5s ease;
-        padding: 90px 50px;
+        padding: 70px 50px;
 
         h3 {
             font-size: 22px;
@@ -287,5 +319,94 @@
         right: -800px;
     }
 
+    .main__table {
+        display: flex;
+        flex-direction: column;
+        border: 2px solid #E5E7E9;
+
+        .headerTable {
+            height: 70px;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            flex-direction: row;
+            background-color: #2F73EA;
+            color: white;
+            font-size: 16px;
+            padding: 0 40px;
+
+            .item:nth-child(1) {
+                width: 10%;
+            }
+
+            .item:nth-child(2) {
+                width: 40%;
+                text-align: center;
+            }
+
+            .item:nth-child(3) {
+                width: 25%;
+                text-align: center;
+                flex-wrap: wrap;
+                word-spacing: 60px;
+            }
+
+            .item:nth-child(4) {
+                width: 25%;
+                text-align: center;
+            }
+        }
+
+        .headerTablePadding {
+            padding-right: calc(40px + 18px);
+        }
+
+        .contentTable {
+            display: flex;
+            flex-direction: column;
+            max-height: 650px;
+            overflow: auto;
+            color: #7C8793;
+
+            .row {
+                margin: 0;
+                padding: 16px 40px;
+                align-items: center;
+                border-top: 1px solid #E5E7E9;
+
+                .item:nth-child(1) {
+                    width: 10%;
+                }
+
+                .item:nth-child(2) {
+                    width: 40%;
+                    text-align: start;
+                }
+
+                .item:nth-child(3) {
+                    width: 25%;
+                    text-align: center;
+                    flex-wrap: wrap;
+                    word-spacing: 60px;
+                }
+
+                .item:nth-child(4) {
+                    width: 25%;
+                    text-align: center;
+                }
+            }
+
+            .row:nth-child(2n + 1) {
+                background-color: white;
+            }
+
+            .row:hover {
+                cursor: pointer;
+                background-color: #f2f2f3;
+            }
+        }
+
+        
+    }
     
 </style>
