@@ -26,7 +26,7 @@
       </div>
     </div>
     <div class="main__right">
-      <FilterComponent />
+      <FilterComponent :filterMas="filter" />
     </div>
   </div>
 </template>
@@ -98,12 +98,16 @@ export default {
           },
         ],
       },
-      filters: [
-        { text: "lala", label: "lala" },
-        { text: "lala", label: "lala" },
-        { text: "lala", label: "lala" },
-        { text: "lala", label: "lala" },
-      ],
+      filter: {
+        types_of_publication: [
+          "Журнал",
+          "Обзор",
+          "Сборник статей, трудов",
+          "Статья",
+          "Тестовое имя1",
+          "Книга",
+        ],
+      },
     };
   },
 };
