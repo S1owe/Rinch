@@ -62,8 +62,11 @@
         </div>
       </div>
 
-      <div class="worker__right">
-        <FilterComponent :filterMas="filter" @typechart="changeFilters" />
+      <div class="worker__right" v-if="publicTypes.length > 0">
+        <FilterComponent
+          :filterMas="getFillter"
+          @update-filter="changeFilters"
+        />
       </div>
     </div>
 
@@ -108,13 +111,8 @@ export default {
 
   data() {
     return {
+      publicTypes: [],
       name: "Митрохин Максим Александрович",
-
-      topics: [
-        { count: 23, name: "Всего статей" },
-        { count: 12, name: "Кол-во цитирований" },
-        { count: 5, name: "Индекс Хирша" },
-      ],
 
       table: {
         fields: [
@@ -161,43 +159,48 @@ export default {
           link: "/asd",
         },
       ],
-
-      filter: {
-        page: "employee",
-        types_of_publication: [
-          "Журнал",
-          "Монография, изданная зарубежными издательствами (наличие ISBN)",
-          "Научная конференция с очным участием (с публикацией сборника в РИНЦ)",
-          "Научные материалы",
-          "Обзор",
-          "Сборник статей, трудов",
-          "Статья",
-          "Издательство1",
-          "Статья1",
-          "Тестовое имя1",
-          "Книга",
-        ],
-        count_citation: "10",
-      },
     };
   },
 
   computed: {
-    ...mapGetters(["GET_WORKER", "GET_WORKER_ARTICLES"]),
+    ...mapGetters(["GET_WORKER"]),
+    topics() {
+      return [
+        { count: +this.GET_WORKER.count, name: "Всего статей" },
+        { count: this.GET_WORKER.cit, name: "Кол-во цитирований" },
+        { count: this.GET_WORKER.hirsh, name: "Индекс Хирша" },
+      ];
+    },
+    getFillter() {
+      return {
+        page: "employee",
+        types_of_publication: this.publicTypes,
+        count_citation: "0",
+      };
+    },
   },
 
   methods: {
-    ...mapActions(["FETCH_WORKER"]),
+    ...mapActions(["FETCH_WORKER", "FETCH_PUB_TYPES"]),
     ...mapMutations(["CLEAR_WORKER"]),
-    changeFilters() {
-      console.log("asdasd");
+    changeFilters(data) {
+      const requestData = {
+        id: this.$route.params.id,
+        start: data.date_first.slice(0, 4),
+        end: data.date_second.slice(0, 4),
+        type: data.check_filter_publication_all ? undefined : data.selected,
+        cit: data.count_citation,
+      };
+
+      this.FETCH_WORKER(requestData);
     },
   },
 
   created() {
-    this.FETCH_WORKER(this.$route.params.id).then(() => {
-      console.log(this.GET_WORKER);
+    this.FETCH_PUB_TYPES().then((res) => {
+      this.publicTypes = res.types.map((item) => item.name);
     });
+    this.FETCH_WORKER({ id: this.$route.params.id });
   },
 
   beforeDestroy() {

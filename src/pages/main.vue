@@ -169,6 +169,11 @@ export default {
         color: #ffffff;
         padding: 32px 0px;
       }
+
+      & tr {
+        border: 2px solid #e5e7e9;
+        box-sizing: border-box;
+      }
     }
 
     & tbody {
@@ -179,6 +184,11 @@ export default {
         font-size: 18px;
         color: #827c93;
         padding: 20px 0px;
+      }
+
+      & tr {
+        border: 2px solid #e5e7e9;
+        box-sizing: border-box;
       }
     }
   }

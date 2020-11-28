@@ -2,7 +2,7 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import { loginUser, logoutUser, checkUser } from '../services/authService';
 import searchUser from '../services/searchService';
-import workerService from '../services/workerService';
+import { getWorker, getPublicationsTypes } from '../services/workerService';
 
 Vue.use(Vuex);
 
@@ -57,12 +57,15 @@ const store = new Vuex.Store({
           return res;
         });
     },
-    FETCH_WORKER({ commit }, id) {
-      return workerService(id)
+    FETCH_WORKER({ commit }, options) {
+      return getWorker(options)
         .then(res => {
           commit('SET_WORKER', res);
           return res;
         });
+    },
+    FETCH_PUB_TYPES() {
+      return getPublicationsTypes();
     }
   },
   getters: {
