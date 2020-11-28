@@ -79,7 +79,7 @@ export default {
         { text: "Поиск по людям", to: "/search" },
         { text: "Графики активности", to: "/graph" },
         { text: "Научные интересы", to: "/network" },
-        { text: "Команды", to: "/team-rating/1" },
+        { text: "Команды", to: "/team-rating/" },
       ],
     };
   },

@@ -13,6 +13,7 @@
     "chart.js": "^2.9.4",
     "chartjs-plugin-labels": "^1.1.0",
     "core-js": "^3.6.5",
+    "noty": "^3.2.0-beta",
     "vis-data": "^7.1.1",
     "vis-network": "^8.5.4",
     "vis-util": "^4.3.4",

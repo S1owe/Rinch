@@ -8,33 +8,36 @@
       <div class="search__input-wrap">
         <span class="search__input-label">Введите ФИО или ID сотрудника</span>
 
-        <b-input-group class="search__input-group">
-          <template #append>
-            <div class="search__input-icon">
-              <svg
-                width="32"
-                height="32"
-                viewBox="0 0 32 32"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  fill-rule="evenodd"
-                  clip-rule="evenodd"
-                  d="M13.3334 24.0001C7.44238 24.0001 2.66675 19.2245 2.66675 13.3334C2.66675 7.44238 7.44238 2.66675 13.3334 2.66675C19.2245 2.66675 24.0001 7.44238 24.0001 13.3334C24.0001 15.7984 23.164 18.068 21.7599 19.8743L28.9429 27.0572L27.0573 28.9429L19.8743 21.7599C18.068 23.164 15.7984 24.0001 13.3334 24.0001ZM21.3334 13.3334C21.3334 17.7517 17.7517 21.3334 13.3334 21.3334C8.91514 21.3334 5.33342 17.7517 5.33342 13.3334C5.33342 8.91514 8.91514 5.33341 13.3334 5.33341C17.7517 5.33341 21.3334 8.91514 21.3334 13.3334Z"
-                  fill="#2F73EA"
-                />
-              </svg>
-            </div>
-          </template>
+        <div class="d-flex">
+          <b-input-group class="search__input-group">
+            <template #append>
+              <div class="search__input-icon">
+                <svg
+                  width="32"
+                  height="32"
+                  viewBox="0 0 32 32"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                    d="M13.3334 24.0001C7.44238 24.0001 2.66675 19.2245 2.66675 13.3334C2.66675 7.44238 7.44238 2.66675 13.3334 2.66675C19.2245 2.66675 24.0001 7.44238 24.0001 13.3334C24.0001 15.7984 23.164 18.068 21.7599 19.8743L28.9429 27.0572L27.0573 28.9429L19.8743 21.7599C18.068 23.164 15.7984 24.0001 13.3334 24.0001ZM21.3334 13.3334C21.3334 17.7517 17.7517 21.3334 13.3334 21.3334C8.91514 21.3334 5.33342 17.7517 5.33342 13.3334C5.33342 8.91514 8.91514 5.33341 13.3334 5.33341C17.7517 5.33341 21.3334 8.91514 21.3334 13.3334Z"
+                    fill="#2F73EA"
+                  />
+                </svg>
+              </div>
+            </template>
 
-          <b-form-input
-            @change="change"
-            v-model="searchText"
-            placeholder="Иванов Иван Иванович"
-            class="search__search-input"
-          ></b-form-input>
-        </b-input-group>
+            <b-form-input
+              @change="change"
+              v-model="searchText"
+              placeholder="Иванов Иван Иванович"
+              class="search__search-input"
+            ></b-form-input>
+          </b-input-group>
+          <b-button variant="outline-info" class="ml-3" @click="change">Поиск</b-button>
+        </div>
       </div>
 
       <transition name="fade" mode="out-in">

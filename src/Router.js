@@ -7,7 +7,6 @@ import Auth from './pages/auth';
 import Main from './pages/main';
 import Graph from './pages/graph';
 import Network from './pages/Network'
-import PageWithModal from '@/pages/PageWithModal';
 import Search from './pages/search';
 import Worker from './pages/worker';
 import TeamRating from './pages/TeamRating';
@@ -42,12 +41,6 @@ const router = new VueRouter({
       props: true,
     },
     {
-      path: '/modal',
-      name: 'modal',
-      component: PageWithModal,
-      props: true,
-    },
-    {
       path: '/search',
       name: 'search',
       component: Search,
@@ -60,7 +53,7 @@ const router = new VueRouter({
       props: true,
     },
     {
-      path: '/team-rating/:id',
+      path: '/team-rating/',
       name: 'team-rating',
       component: TeamRating,
       props: true,
