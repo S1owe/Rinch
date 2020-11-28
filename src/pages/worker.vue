@@ -39,12 +39,17 @@
         </div>
 
         <div class="worker__table">
-          <b-table
-            striped
-            hover
-            :items="table.items"
-            :fields="table.fields"
-          ></b-table>
+          <b-table striped hover :items="table.items" :fields="table.fields">
+            <template #cell(commerc)="data">
+              <router-link
+                v-if="data.value && data.value.to"
+                class="worker__table-link"
+                :to="data.value.to"
+              >
+                Просмотр
+              </router-link>
+            </template>
+          </b-table>
         </div>
       </div>
 
@@ -117,7 +122,7 @@ export default {
           { key: "location", label: "Место публикации" },
           { key: "date", label: "Дата публикации" },
           { key: "citationsCount", label: "Кол-во цитирований" },
-          { key: "authorshipShare", label: "Доля авторства" },
+          { key: "commerc", label: "Коммерциализация" },
         ],
 
         items: [
@@ -127,7 +132,7 @@ export default {
             location: "Semisupervised learning in pattern recognitio",
             date: "01.03.20",
             citationsCount: 5,
-            authorshipShare: 0.33,
+            commerc: { to: "/a" },
           },
           {
             index: 2,
@@ -135,7 +140,7 @@ export default {
             location: "Moscow Workshop on Electronic and N",
             date: "01.03.20",
             citationsCount: 6,
-            authorshipShare: 0.6,
+            commerc: { to: "/b" },
           },
           {
             index: 3,
@@ -143,7 +148,7 @@ export default {
             location: "11th IEEE International Conference ",
             date: "10.04.19",
             citationsCount: 10,
-            authorshipShare: 0.4,
+            commerc: null,
           },
           {
             index: 4,
@@ -151,7 +156,7 @@ export default {
             location: "Conference of Open Innovation Assoc",
             date: "08.01.18",
             citationsCount: 3,
-            authorshipShare: 0,
+            commerc: { to: "/c" },
           },
           {
             index: 5,
@@ -159,7 +164,7 @@ export default {
             location: "Journal of Advanced Research in Dyn",
             date: "01.01.18",
             citationsCount: 4,
-            authorshipShare: 0,
+            commerc: null,
           },
           {
             index: 6,
@@ -167,7 +172,7 @@ export default {
             location: "Proceedings of 2017 20th IEEE Inter",
             date: "06.07.17",
             citationsCount: 6,
-            authorshipShare: 0,
+            commerc: null,
           },
         ],
       },
@@ -447,6 +452,15 @@ export default {
     &:last-child {
       margin-right: 0px;
     }
+  }
+
+  &__table-link {
+    border: 2px solid #2f73ea;
+    padding: 8px 10px;
+    box-sizing: border-box;
+    font-size: 18px;
+    line-height: 140%;
+    color: #2f73ea;
   }
 }
 </style>
