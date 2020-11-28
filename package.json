@@ -9,10 +9,19 @@
   },
   "dependencies": {
     "bootstrap-vue": "^2.19.0",
+    "chart.js": "^2.9.4",
+    "chartjs-plugin-labels": "^1.1.0",
     "core-js": "^3.6.5",
+    "vis-data": "^7.1.1",
+    "vis-network": "^8.5.4",
+    "vis-util": "^4.3.4",
     "vue": "^2.6.11",
+    "vue-calendar-heatmap": "^0.8.4",
+    "vue-chartless": "^0.1.23",
     "vue-d3-charts": "^0.2.8",
-    "vue-router": "^3.4.9"
+    "vue-router": "^3.4.9",
+    "vue-trend-chart": "^0.15.3",
+    "vue-vis-network": "^1.0.2"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",
