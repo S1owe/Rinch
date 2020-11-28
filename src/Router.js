@@ -72,10 +72,10 @@ const router = new VueRouter({
       props: true,
     },
     {
-        path: '/comm',
-        name: 'comm',
-        component: Comm,
-        props: true,
+      path: '/comm',
+      name: 'comm',
+      component: Comm,
+      props: true,
     },
   ],
 });

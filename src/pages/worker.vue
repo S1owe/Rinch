@@ -3,7 +3,7 @@
     <div class="worker__main">
       <div class="worker__left">
         <div class="worker__title">
-          <h1 class="worker__title-text">{{ name }}</h1>
+          <h1 class="worker__title-text">{{ GET_WORKER.name }}</h1>
         </div>
 
         <div class="worker__interests">
@@ -13,7 +13,7 @@
 
           <div class="worker__interests-list">
             <div
-              v-for="(item, index) in interests"
+              v-for="(item, index) in GET_WORKER.topics"
               :key="index"
               class="worker__interest-item"
             >
@@ -39,7 +39,16 @@
         </div>
 
         <div class="worker__table">
-          <b-table striped hover :items="table.items" :fields="table.fields">
+          <b-table
+            striped
+            hover
+            :items="GET_WORKER.articles"
+            :fields="table.fields"
+          >
+            <template #cell(index)="data">
+              {{ data.index + 1 }}
+            </template>
+
             <template #cell(commerc)="data">
               <router-link
                 v-if="data.value && data.value.to"
@@ -54,7 +63,7 @@
       </div>
 
       <div class="worker__right">
-        <FilterComponent :filterMas="filter" />
+        <FilterComponent :filterMas="filter" @typechart="changeFilters" />
       </div>
     </div>
 
@@ -91,6 +100,7 @@
 <script>
 import StatsCounter from "../components/StatsCouter";
 import FilterComponent from "../components/FilterComponent";
+import { mapGetters, mapActions, mapMutations } from "vuex";
 
 export default {
   name: "Worker",
@@ -106,74 +116,14 @@ export default {
         { count: 5, name: "Индекс Хирша" },
       ],
 
-      interests: [
-        "Computer Networks",
-        "Information Systems",
-        "Electronic Engineering",
-        "Software",
-        "Hardware and Architecture",
-        "Artificial Intelligence",
-      ],
-
       table: {
         fields: [
           { key: "index", label: "№" },
-          { key: "name", label: "Название" },
-          { key: "location", label: "Место публикации" },
-          { key: "date", label: "Дата публикации" },
-          { key: "citationsCount", label: "Кол-во цитирований" },
+          { key: "title", label: "Название" },
+          { key: "publish_place", label: "Место публикации" },
+          { key: "year", label: "Дата публикации" },
+          { key: "cit", label: "Кол-во цитирований" },
           { key: "commerc", label: "Коммерциализация" },
-        ],
-
-        items: [
-          {
-            index: 1,
-            name: "Semisupervised learning in pattern recognitio",
-            location: "Semisupervised learning in pattern recognitio",
-            date: "01.03.20",
-            citationsCount: 5,
-            commerc: { to: "/a" },
-          },
-          {
-            index: 2,
-            name: "Formalization of Organization of Signaling Pr",
-            location: "Moscow Workshop on Electronic and N",
-            date: "01.03.20",
-            citationsCount: 6,
-            commerc: { to: "/b" },
-          },
-          {
-            index: 3,
-            name: "Deep learning approach for QRS wave detection",
-            location: "11th IEEE International Conference ",
-            date: "10.04.19",
-            citationsCount: 10,
-            commerc: null,
-          },
-          {
-            index: 4,
-            name: "Investigation of models for prognosis of crit",
-            location: "Conference of Open Innovation Assoc",
-            date: "08.01.18",
-            citationsCount: 3,
-            commerc: { to: "/c" },
-          },
-          {
-            index: 5,
-            name: "Use of the mass service theory elements while",
-            location: "Journal of Advanced Research in Dyn",
-            date: "01.01.18",
-            citationsCount: 4,
-            commerc: null,
-          },
-          {
-            index: 6,
-            name: "Intelligent data processing scheme for",
-            location: "Proceedings of 2017 20th IEEE Inter",
-            date: "06.07.17",
-            citationsCount: 6,
-            commerc: null,
-          },
         ],
       },
 
@@ -230,6 +180,28 @@ export default {
         count_citation: "10",
       },
     };
+  },
+
+  computed: {
+    ...mapGetters(["GET_WORKER", "GET_WORKER_ARTICLES"]),
+  },
+
+  methods: {
+    ...mapActions(["FETCH_WORKER"]),
+    ...mapMutations(["CLEAR_WORKER"]),
+    changeFilters() {
+      console.log("asdasd");
+    },
+  },
+
+  created() {
+    this.FETCH_WORKER(this.$route.params.id).then(() => {
+      console.log(this.GET_WORKER);
+    });
+  },
+
+  beforeDestroy() {
+    this.CLEAR_WORKER();
   },
 };
 </script>

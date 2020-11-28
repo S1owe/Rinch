@@ -2,6 +2,7 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import { loginUser, logoutUser, checkUser } from '../services/authService';
 import searchUser from '../services/searchService';
+import workerService from '../services/workerService';
 
 Vue.use(Vuex);
 
@@ -11,6 +12,7 @@ const store = new Vuex.Store({
       token: localStorage.getItem('token') || '',
     },
     users: [],
+    worker: {},
   },
   mutations: {
     SET_USER: (state, user) => {
@@ -18,6 +20,12 @@ const store = new Vuex.Store({
     },
     SET_USERS: (state, users) => {
       state.users = users;
+    },
+    SET_WORKER: (state, worker) => {
+      state.worker = worker;
+    },
+    CLEAR_WORKER: (state) => {
+      state.worker = {};
     }
   },
   actions: {
@@ -48,6 +56,13 @@ const store = new Vuex.Store({
           commit('SET_USERS', res);
           return res;
         });
+    },
+    FETCH_WORKER({ commit }, id) {
+      return workerService(id)
+        .then(res => {
+          commit('SET_WORKER', res);
+          return res;
+        });
     }
   },
   getters: {
@@ -56,7 +71,10 @@ const store = new Vuex.Store({
     },
     GET_USERS({ users }) {
       return users;
-    }
+    },
+    GET_WORKER({ worker }) {
+      return worker;
+    },
   }
 });
 
