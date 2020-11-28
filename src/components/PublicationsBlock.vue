@@ -255,7 +255,6 @@ export default {
     font-size: 18px;
     line-height: 140%;
     color: #2f73ea;
-    cursor: pointer;
 
     &:after {
       position: absolute;

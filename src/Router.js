@@ -12,6 +12,7 @@ import Search from './pages/search';
 import Worker from './pages/worker';
 import TeamRating from './pages/TeamRating';
 import Team from './pages/team';
+import Comm from './pages/comm';
 
 const router = new VueRouter({
   mode: 'history',
@@ -69,7 +70,13 @@ const router = new VueRouter({
       name: 'team',
       component: Team,
       props: true,
-    }
+    },
+    {
+        path: '/comm',
+        name: 'comm',
+        component: Comm,
+        props: true,
+    },
   ],
 });
 

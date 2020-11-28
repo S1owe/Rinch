@@ -6817,7 +6817,7 @@ pnp-webpack-plugin@^1.6.4:
   dependencies:
     ts-pnp "^1.1.6"
 
-popper.js@^1.16.1:
+popper.js@^1.16.0, popper.js@^1.16.1:
   version "1.16.1"
   resolved "https://registry.yarnpkg.com/popper.js/-/popper.js-1.16.1.tgz#2a223cb3dc7b6213d740e40372be40de43e65b1b"
   integrity sha512-Wb4p1J4zyFTbM+u6WuO4XstYx4Ky9Cewe4DWrel7B0w6VVICvPwdOpotjzcf6eD8TsckVnIMNONQyPIUFOUbCQ==
@@ -8887,6 +8887,15 @@ uuid@^3.3.2, uuid@^3.4.0:
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.4.0.tgz#b23e4358afa8a202fe7a100af1f5f883f02007ee"
   integrity sha512-HjSDRw6gZE5JMggctHBcjVak08+KEVhSIiDzFnT9S9aegmp85S/bReBVTb4QTFaRNptJ9kuYaNhnbNEOkbKb/A==
 
+v-tooltip@^2.0.0-rc.32:
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/v-tooltip/-/v-tooltip-2.0.3.tgz#34fd64096656f032b1616567bf62f6165c57d529"
+  integrity sha512-KZZY3s+dcijzZmV2qoDH4rYmjMZ9YKGBVoUznZKQX0e3c2GjpJm3Sldzz8HHH2Ud87JqhZPB4+4gyKZ6m98cKQ==
+  dependencies:
+    lodash "^4.17.15"
+    popper.js "^1.16.0"
+    vue-resize "^0.4.5"
+
 v8-compile-cache@^2.0.3:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/v8-compile-cache/-/v8-compile-cache-2.2.0.tgz#9471efa3ef9128d2f7c6a7ca39c4dd6b5055b132"
@@ -8975,6 +8984,13 @@ vue-c3@^1.2.11:
   resolved "https://registry.yarnpkg.com/vue-c3/-/vue-c3-1.2.11.tgz#6937f0dd54addab2b76de74cd30c0ab9ad788080"
   integrity sha512-jxYZ726lKO1Qa+CHOcekPD4ZIwcMQy2LYDafYy2jYD1oswAo/4SnEJmbwp9X+NWzZg/KIAijeB9ImS7Gfvhceg==
 
+vue-calendar-heatmap@^0.8.4:
+  version "0.8.4"
+  resolved "https://registry.yarnpkg.com/vue-calendar-heatmap/-/vue-calendar-heatmap-0.8.4.tgz#eb450a23870df0ca1ab80d12489125f590d482d2"
+  integrity sha512-Hx7OYBY1ghUIxKmFIIzpLT4XlcrwnI3WpadJEj/sKj5quoxwEuSDKmf94v0zWOHeQ/2CrB1G66geaKR/O56+OQ==
+  dependencies:
+    v-tooltip "^2.0.0-rc.32"
+
 vue-chartless@^0.1.23:
   version "0.1.23"
   resolved "https://registry.yarnpkg.com/vue-chartless/-/vue-chartless-0.1.23.tgz#7c2309ea32e8101fd647122dbf397d280f0b7a62"
@@ -9044,6 +9060,11 @@ vue-loader@^15.9.2:
     vue-hot-reload-api "^2.3.0"
     vue-style-loader "^4.1.0"
 
+vue-resize@^0.4.5:
+  version "0.4.5"
+  resolved "https://registry.yarnpkg.com/vue-resize/-/vue-resize-0.4.5.tgz#4777a23042e3c05620d9cbda01c0b3cc5e32dcea"
+  integrity sha512-bhP7MlgJQ8TIkZJXAfDf78uJO+mEI3CaLABLjv0WNzr4CcGRGPIAItyWYnP6LsPA4Oq0WE+suidNs6dgpO4RHg==
+
 vue-router@^3.4.9:
   version "3.4.9"
   resolved "https://registry.yarnpkg.com/vue-router/-/vue-router-3.4.9.tgz#c016f42030ae2932f14e4748b39a1d9a0e250e66"
@@ -9069,6 +9090,11 @@ vue-template-es2015-compiler@^1.9.0:
   version "1.9.1"
   resolved "https://registry.yarnpkg.com/vue-template-es2015-compiler/-/vue-template-es2015-compiler-1.9.1.tgz#1ee3bc9a16ecbf5118be334bb15f9c46f82f5825"
   integrity sha512-4gDntzrifFnCEvyoO8PqyJDmguXgVPxKiIxrBKjIowvL9l+N66196+72XVYR8BBf1Uv1Fgt3bGevJ+sEmxfZzw==
+
+vue-trend-chart@^0.15.3:
+  version "0.15.3"
+  resolved "https://registry.yarnpkg.com/vue-trend-chart/-/vue-trend-chart-0.15.3.tgz#14a2e28222891dded74dd743343bfca215f4afa4"
+  integrity sha512-DkGC36pgZUOsn8t9cK65kHIW62nVOhKV951v7ZfM8BWepfgU4cOoIlztEqfY+pC5WtC4rRBoXs/fQ4aIDRPlQw==
 
 vue-vis-network@^1.0.2:
   version "1.0.2"
