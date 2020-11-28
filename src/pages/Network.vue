@@ -1,7 +1,67 @@
 <template>
     <div id="network">
         <h1>Публикационная активность сотрудников</h1>
+
+        <transition name="fade">
+            <div class="filter_background" v-if="filterShow">
+                <div class="filter_container">
+                    <svg @click="filterShow = false" width="46" height="46" viewBox="0 0 46 46" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M22.6277 20.7418L31.1129 12.2565L32.9986 14.1422L24.5133 22.6274L32.9986 31.1127L31.1129 32.9983L22.6277 24.5131L14.1424 32.9983L12.2568 31.1127L20.742 22.6274L12.2568 14.1422L14.1424 12.2565L22.6277 20.7418Z" fill="#2F73EA"/>
+                    </svg>
+
+
+                    <div class="title">Фильтр</div>
+
+                    <div class="publish_container">
+                        <div class="filter_title">Темы публикаций:</div>
+
+                        <div class="filter_third_container" v-bind:class="{ filter_padding: filter.filter_subdivision_show}">
+
+                            <div class="filter_third_check filter_third_first" v-bind:class="{ filter_third_padding: filter.filter_subdivision_show}">
+                                <input type="checkbox" id="filter_check_all" @click="select_all()" ref="test" checked>
+                                <label for="filter_check_all">
+                                    <span class="checkbox__icon"></span>
+                                    <a>Все</a>
+                                </label>
+                            </div>
+
+
+                            <div class="filter_third_check" v-for="(types_of_publications, index) in filter.types_of_publication" :key="'filter_publish_' + index">
+
+                                <div class="filter_third_check_cont"
+                                     v-bind:class="{ disable_input: (index >= 3) && (!filter.filter_subdivision_show)}"
+                                     v-if="((filter.filter_subdivision_show) || (index <= 3))"
+                                >
+                                    <input type="checkbox" :id="'filter_' + (index) + '_check'" :value="types_of_publications" @click="check_all_checked(types_of_publications)" v-model="filter.selected">
+
+                                    <label :for="'filter_' + (index) + '_check'">
+                                        <span class="checkbox__icon"></span>
+                                        <a>{{types_of_publications}}</a>
+                                    </label>
+                                </div>
+
+                            </div>
+
+
+                        </div>
+
+                        <div class="filter_btn_show_all" :class="{active: filter.filter_subdivision_show}" @click="subdivision_show()"><a>{{filter.btn_show_text}}</a></div>
+                    </div>
+
+                    <div class="btn_update_filter" @click="updateFilter">Обновить</div>
+
+                </div>
+            </div>
+        </transition>
+
         <div class="network_container">
+            <div class="filter_btn" @click="filterShow = true">
+                <div class="filter_a">Фильтр</div>
+                <svg width="42" height="40" viewBox="0 0 42 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M3.92773 10.6264L15.8232 23.9597V38.2385L26.0192 34.4885V23.9597L37.9147 10.6264V6.66683C37.9147 4.82588 36.393 3.3335 34.516 3.3335H7.32643C5.44938 3.3335 3.92773 4.82588 3.92773 6.66683V10.6264ZM34.516 6.66682V8.33349H7.32644V6.66682H34.516ZM9.37206 11.6668H32.4704L23.5488 21.6668H18.2936L9.37206 11.6668ZM19.2219 25.0002V33.4285L22.6206 32.1785V25.0002H19.2219Z" fill="#2F73EA"/>
+                </svg>
+            </div>
+
             <network
                     class="wrapper" ref="network"
                     :nodes="nodes"
@@ -60,6 +120,15 @@
         data() {
             return {
                 statusModal: false,
+                filterShow: false,
+
+                filter: {
+                    filter_subdivision_show: false, // visibility расширенного списка подразделений
+                    btn_show_text: "Показать всё",
+                    types_of_publication: ['BigDate','Front-end','Ux','UI','Algorithm','Сборник статей, трудов','Статья','Издательство1','Статья1','Тестовое имя1', 'Книга'],
+                    selected: ['BigDate','Front-end','Ux','UI','Algorithm','Сборник статей, трудов','Статья','Издательство1','Статья1','Тестовое имя1', 'Книга'],
+                    check_filter_publication_all: true,   // показать все / скрыть все
+                },
 
                 author: [
                     {name: 'Митрохин Максим Александрович', rank: 'к.т.н., доцент'},
@@ -218,6 +287,55 @@
 
         methods: {
 
+            updateFilter() {
+              this.filterShow = false;
+            },
+
+            select_all() {
+                this.filter.check_filter_publication_all = !this.filter.check_filter_publication_all;
+
+                if (this.filter.check_filter_publication_all === false) {
+                    this.filter.selected = [];
+                } else {
+                    for (let i in this.filter.types_of_publication) {
+                        this.filter.selected.push(this.filter.types_of_publication[i]);
+                    }
+                }
+
+            },
+
+            subdivision_show() {
+                if (this.filter.filter_subdivision_show === false) {
+                    this.filter.filter_subdivision_show = true;
+                    this.filter.btn_show_text = "Скрыть";
+                } else {
+                    this.filter.filter_subdivision_show = false;
+                    this.filter.btn_show_text = "Показать всё"
+                }
+
+            },
+
+            check_all_checked(value) {
+                let include = this.filter.selected.indexOf(value);
+
+                if (include !== -1) {
+                    this.filter.selected.splice(include, 1);
+                } else {
+                    this.filter.selected.push(value);
+                }
+
+                (this.filter.selected.length !== this.filter.types_of_publication.length)?(this.filter.check_filter_publication_all = false):(this.filter.check_filter_publication_all = true);
+
+                if (this.filter.selected.length === this.filter.types_of_publication.length) {
+                    this.filter.check_filter_publication_all = true;
+                    document.getElementById('filter_check_all').checked = true;      // disable checkbox
+                } else {
+                    this.filter.check_filter_publication_all = false;
+                    document.getElementById('filter_check_all').checked = false;      // enable checkbox
+                }
+
+            },
+
             removeTitle(title) {
               if (title.length > 50) {
                   return (title.substr(0, 50) + '...')
@@ -262,9 +380,16 @@
 
     $text_color: #2F73EA;
 
+    .fade-enter-active, .fade-leave-active {
+        transition: opacity .5s;
+    }
+    .fade-enter, .fade-leave-to /* .fade-leave-active до версии 2.1.8 */ {
+        opacity: 0;
+    }
+
     .wrapper{
         min-height: 85vh;
-        border: 1px solid black;
+        border: 1px solid #878787;
         background-color: #fff;
         padding: 10px;
         height: 85vh;
@@ -405,8 +530,231 @@
                 background-color: #f2f2f3;
             }
         }
-
-        
     }
+
+    .filter_btn {
+        z-index: 5;
+        margin-top: 20px;
+        margin-left: 20px;
+        position: absolute;
+        width: 180px;
+        height: 64px;
+        border: 2px solid #2F73EA;
+        color: #2F73EA;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 22px;
+        background-color: white;
+
+        .filter_a {
+            margin-right: 10px;
+        }
+    }
+
+    .filter_btn:hover {
+        cursor: pointer;
+    }
+
+
+    .filter_container {
+        width: 380px;
+        height: 600px;
+        padding: 38px 38px 38px 38px;
+        border: 2px solid #E5E7E9;
+        background: #F9F9FA;
+        position: relative;
+
+        svg {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            cursor: pointer;
+        }
+
+
+        .title {
+            color: $text_color;
+            font-size: 28px;
+            padding-bottom: 16px;
+            text-align: center;
+        }
+
+        .citations_container {
+            margin-top: 20px;
+
+            input {
+                display: flex;
+                align-items: center;
+                width: 100%;
+                height: 42px;
+                border: 1px solid #E5E7E9;
+                background-color: white;
+                color: #7C8793;
+                padding: 0 16px;
+                font-size: 18px;
+            }
+        }
+
+        .filter_title {
+            color: $text_color;
+            font-size: 20px;
+            margin-bottom: 16px;
+        }
+
+        .gate_input_container {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 30px;
+        }
+
+        .gate_input_t {
+            width: 16px;
+            height: 2px;
+            background-color: #7C8793;
+        }
+
+        .filter_third_first a, .filter_third_check a {
+            font-size: 18px;
+            color: #7C8793;
+            margin-left: 10px;
+        }
+
+        .filter_third_first, .filter_third_check_cont {
+            display: flex;
+            flex-direction: row;
+            align-items: flex-start;
+            line-height: normal;
+            margin-bottom: 16px;
+        }
+
+        input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            min-width: 18px;
+            min-height: 18px;
+            cursor: pointer;
+            position: absolute;
+            opacity: 0;
+            z-index: -1;
+        }
+
+        input[type="checkbox"]:checked + label span {
+            border: 1px solid #138EFF;
+            //   vertical-align: middle;
+            background-color: #138EFF;
+            background-image: url(../assets/check.png);
+            background-size: cover;
+        }
+
+        input[type="checkbox"] + label span {
+            width: 18px;
+            height: 18px;
+            min-width: 18px;
+            min-height: 18px;
+            display: flex;
+            border-radius: 2px;
+            cursor: pointer;
+            border: 1px solid #7C8793;
+            background: rgba(19, 142, 255, 0);
+        }
+
+
+        label {
+            display: flex;
+            margin-bottom: 0;
+            flex-direction: row;
+            align-items: flex-start;
+            line-height: normal;
+        }
+
+        .filter_padding {
+            overflow: auto;
+            max-height: 300px;
+            margin-bottom: 16px;
+        }
+
+        .filter_btn_show_all {
+            cursor: pointer;
+            font-size: 18px;
+            color: #2F73EA;
+            width: 110px;
+        }
+
+        .filter_btn_show_all:hover {
+            text-decoration: underline;
+        }
+
+        .unit_container {
+            margin-top: 20px;
+        }
+
+        .btn_update_filter {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #2F73EA;
+            color: white;
+            font-size: 18px;
+            font-weight: normal;
+            height: 48px;
+            margin-top: 24px;
+            cursor: pointer;
+            transition: 0.5s ease;
+            border: 2px solid #2F73EA;
+        }
+
+        .btn_update_filter:hover {
+            background-color: rgba(255, 255, 255, 0);
+            color: #2F73EA;
+        }
+
+        .filter_graph_select {
+            position: relative;
+            svg {
+                position: absolute;
+                right: 16px;
+                top: 18px;
+            }
+        }
+
+        .type_graph {
+            margin-top: 20px;
+
+            select {
+                display: flex;
+                align-items: center;
+                width: 100%;
+                height: 42px;
+                border: 1px solid #E5E7E9;
+                background-color: white;
+                color: #7C8793;
+                padding: 0 16px;
+                font-size: 18px;
+                -webkit-appearance: none;
+                -moz-appearance: none;
+                -ms-appearance: none;
+                appearance: none !important;
+            }
+        }
+
+
+    }
+
+    .filter_background {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        padding-top: 200px;
+        justify-content: center;
+        position: absolute;
+        background-color: rgba(0, 0, 0, 0.76);
+        z-index: 20;
+        left: 0;
+        top: 0;
+    }
+
     
 </style>
