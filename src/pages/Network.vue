@@ -260,10 +260,17 @@
 
             networkEvent(data) {
                 const edgeId = data.edges[0];
-                console.log(edgeId);
-                // const edge = this.edges.find(item )
+                const edge = this.edges.find(item => item.id === edgeId);
+                const { to, from } = edge;
+                const users = this.nodes.filter(item => item.id === to || item.id === from).map(item => item.label);
+                
+                this.FETCH_USER_ARTICLES(to, from)
+                    .then(res => {
+                        this.sidebarmenu.users = users;
+                        this.sidebarmenu.articles = res.articles;
 
-                // this.FETCH_USER_ARTICLES
+                        this.statusModal = true;
+                    })
                 // this.statusModal = true;
             }
 
