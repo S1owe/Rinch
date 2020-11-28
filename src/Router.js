@@ -7,6 +7,7 @@ import Auth from './pages/auth';
 import Main from './pages/main';
 import Graph from './pages/graph';
 import Network from './pages/Network'
+import PageWithModal from '@/pages/PageWithModal';
 
 const router = new VueRouter({
   mode: 'history',
@@ -35,6 +36,12 @@ const router = new VueRouter({
       component: Network,
       props: true,
   },
+    {
+      path: '/modal',
+      name: 'modal',
+      component: PageWithModal,
+      props: true,
+    },
   ],
 });
 
