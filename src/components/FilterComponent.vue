@@ -188,12 +188,7 @@ export default {
                 this.$emit('typechart', this.filter.type_graph)
             }
 
-            this.$emit('set_new_types', {
-              data: this.filter.selected,
-              date_first: this.filter.date_first,
-              date_second: this.filter.date_second,
-            });
-
+            this.$emit('update-filter', this.filter)
         },
         // выбрать все / снять выделения "выбрать все"
         select_all() {

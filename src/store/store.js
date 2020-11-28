@@ -2,7 +2,9 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import { loginUser, logoutUser, checkUser } from '../services/authService';
 import searchUser from '../services/searchService';
-import workerService from '../services/workerService';
+import { getWorker, getPublicationsTypes } from '../services/workerService';
+import getDepartments from '../services/mainService';
+import { getGraph, getUsersArticles } from '../services/graphService';
 
 Vue.use(Vuex);
 
@@ -13,6 +15,7 @@ const store = new Vuex.Store({
     },
     users: [],
     worker: {},
+    departs: [],
   },
   mutations: {
     SET_USER: (state, user) => {
@@ -26,7 +29,10 @@ const store = new Vuex.Store({
     },
     CLEAR_WORKER: (state) => {
       state.worker = {};
-    }
+    },
+    SET_DEPARTS: (state, departs) => {
+      state.departs = departs;
+    },
   },
   actions: {
     LOGIN_USER({ commit }, { login, password }) {
@@ -57,13 +63,30 @@ const store = new Vuex.Store({
           return res;
         });
     },
-    FETCH_WORKER({ commit }, id) {
-      return workerService(id)
+    FETCH_WORKER({ commit }, options) {
+      return getWorker(options)
         .then(res => {
           commit('SET_WORKER', res);
           return res;
         });
-    }
+    },
+    FETCH_PUB_TYPES() {
+      return getPublicationsTypes();
+    },
+    FETCH_DEPARTS({ commit }) {
+      return getDepartments().then((res) => {
+        commit('SET_DEPARTS', res);
+        return res;
+      });
+    },
+    FETCH_GRAPH() {
+      return getGraph();
+    },
+    // eslint-disable-next-line
+    FETCH_USER_ARTICLES({ commit }, user_1, user_2) {
+      return getUsersArticles(user_1, user_2);
+    },
+    FETCH_ACTIVITY_DATA() {}
   },
   getters: {
     GET_USER({ user }) {
@@ -75,6 +98,9 @@ const store = new Vuex.Store({
     GET_WORKER({ worker }) {
       return worker;
     },
+    GET_DEPARTS({ departs }) {
+      return departs;
+    }
   }
 });
 

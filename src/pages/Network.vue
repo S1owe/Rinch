@@ -67,12 +67,9 @@
                     :nodes="nodes"
                     :edges="edges"
                     :options="options"
-                    @select-edge="networkEvent()"
+                    @select-edge="networkEvent($event)"
                     @click="onNodeSelected($event)"
             >
-                >
-
-
             </network>
         </div>
 
@@ -85,34 +82,31 @@
 
             <h3>{{titleModal}}</h3>
             <div class="author_container">
-                <div class="author" v-for="(people, index) in author" :key="'people_' + index">
-                    {{people.name}}, {{people.rank}}
+                <div class="author" v-for="(people, index) in sidebarmenu.users" :key="'people_' + index">
+                    {{people}}
                 </div>
             </div>
 
-
             <div class="main__table">
-               <div class="headerTable" :class="(table.items.length > 8)?'headerTablePadding':''">
+               <div class="headerTable" :class="(sidebarmenu.articles.length > 8)?'headerTablePadding':''">
                    <div class="item" v-for="(item, i) in table.fields" :key="'table_h_' + i">{{item.label}}</div>
                </div>
                 <div class="contentTable">
-                    <div class="row" v-for="(item, i) in table.items" :key="'table_r_' + i">
-                        <div class="item">{{item.number}}</div>
+                    <div class="row" v-for="(item, i) in sidebarmenu.articles" :key="'table_r_' + i">
+                        <div class="item">{{i + 1}}</div>
                         <div class="item">{{removeTitle(item.title)}}</div>
-                        <div class="item">{{item.date}}</div>
-                        <div class="item">{{item.citations}}</div>
+                        <div class="item">{{item.year}}</div>
+                        <div class="item">{{item.cit}}</div>
                     </div>
                 </div>
             </div>
-
-            
         </div>
     </div>
 </template>
 
 <script>
     import { Network } from "vue-vis-network";
-  
+    import { mapActions } from 'vuex';
     import people from '../assets/people.png';
 
     export default {
@@ -142,125 +136,14 @@
                         { key: "date", label: "Дата публикации" },
                         {key: "citations", label: "Кол-во цитирований"},
                     ],
-
-                    items: [
-                        {
-                            number: 1,
-                            title: 'Semisupervised learning in pattern recognitio',
-                            date: '21.01.20',
-                            citations: 1695,
-                        },
-                        {
-                            number: 2,
-                            title: 'Formalization of Organization of Signaling Pr',
-                            date: '01.01.20',
-                            citations: 106,
-                        },
-                        {
-                            number: 3,
-                            title: 'Deep learning approach for QRS wave detection',
-                            date: '10.02.20',
-                            citations: 36,
-                        },
-                        {
-                            number: 4,
-                            title: 'Investigation of models for prognosis of critir of models for prognosis 1421',
-                            date: '06.03.20',
-                            citations: 10,
-                        },
-                        {
-                            number: 5,
-                            title: 'Use of the mass service theory elements while',
-                            date: '03.03.20',
-                            citations: 6,
-                        },
-                        {
-                            number: 6,
-                            title: 'Semisupervised learning in pattern recognitio',
-                            date: '01.04.20',
-                            citations: 3,
-                        },
-                        {
-                            number: 1,
-                            title: 'Semisupervised learning in pattern recognitio',
-                            date: '21.01.20',
-                            citations: 1695,
-                        },
-                        {
-                            number: 2,
-                            title: 'Formalization of Organization of Signaling Pr',
-                            date: '01.01.20',
-                            citations: 106,
-                        },
-                        {
-                            number: 3,
-                            title: 'Deep learning approach for QRS wave detection',
-                            date: '10.02.20',
-                            citations: 36,
-                        },
-                        {
-                            number: 4,
-                            title: 'Investigation of models for prognosis of critir of models for prognosis 1421',
-                            date: '06.03.20',
-                            citations: 10,
-                        },
-                        {
-                            number: 5,
-                            title: 'Use of the mass service theory elements while',
-                            date: '03.03.20',
-                            citations: 6,
-                        },
-                        {
-                            number: 6,
-                            title: 'Semisupervised learning in pattern recognitio',
-                            date: '01.04.20',
-                            citations: 3,
-                        },
-                    ],
                 },
 
-                nodes: [
-                    {id: 1, shape: "image", image: people,  label: 'Митрохин М.А.'},
-                    {id: 2, shape: "image",  image: people,  label: 'Митрохина Т.А.'},
-                    {id: 3, shape: "image", image: people,  label: 'Балашов М.Ю.'},
-                    {id: 4, shape: "image", image: people,  label: 'Дурнев А.Ю.'},
-                    {id: 5, shape: "image", image: people,  label: 'Мишутина В.А.'},
-                    {id: 6, shape: "image", image: people,  label: 'Татьянена Н.И.'},
-                    {id: 7, shape: "image", image: people,  label: 'Шутов П.А.'},
-                    {id: 8, shape: "image", image: people,  label: 'Прошин Т.А.'},
-                    {id: 9, shape: "image", image: people,  label: 'Прошин Т.А.'},
-                    {id: 10, shape: "image", image: people,  label: 'Прошин Т.А.'},
-                    {id: 11, shape: "image", image: people,  label: 'Митрохин М.А.'},
-                    {id: 12, shape: "image",  image: people,  label: 'Митрохина Т.А.'},
-                    {id: 13, shape: "image", image: people,  label: 'Балашов М.Ю.'},
-                    {id: 14, shape: "image", image: people,  label: 'Дурнев А.Ю.'},
-                    {id: 15, shape: "image", image: people,  label: 'Мишутина В.А.'},
-                    {id: 16, shape: "image", image: people,  label: 'Татьянена Н.И.'},
-                    {id: 17, shape: "image", image: people,  label: 'Шутов П.А.'},
-                    {id: 18, shape: "image", image: people,  label: 'Прошин Т.А.'},
-                    {id: 19, shape: "image", image: people,  label: 'Прошин Т.А.'},
-                    {id: 20, shape: "image", image: people,  label: 'Прошин Т.А.'},
-                ],
-                edges: [
-                    {id: 91, from: 1, to: 2, value: 3},
-                    {id: 92, from: 1, to: 9, value: 2},
-                    {id: 93, from: 2, to: 3, value: 1},
-                    {id: 94, from: 2, to: 4, value: 3},
-                    {id: 95, from: 2, to: 5, value: 7},
-                    {id: 96, from: 5, to: 6, value: 2},
-                    {id: 97, from: 5, to: 7, value: 1},
-                    {id: 98, from: 6, to: 8, value: 1},
-                    {id: 99, from: 7, to: 10, value: 4},
-                    {id: 910, from: 1, to: 20, value: 3},
-                    {id: 911, from: 2, to: 9, value: 2},
-                    {id: 912, from: 4, to: 3, value: 1},
-                    {id: 913, from: 14, to: 4, value: 3},
-                    {id: 914, from: 2, to: 15, value: 7},
-                    {id: 915, from: 11, to: 6, value: 2},
-                    {id: 916, from: 19, to: 18, value: 1},
-                    {id: 917, from: 16, to: 8, value: 1},
-                    {id: 918, from: 17, to: 10, value: 4},
-                ],
+                nodes: [],
+                edges: [],
+                sidebarmenu: {
+                    users: [],
+                    articles: [],
+                },
                 options: {
                     nodes: {
                         borderWidth: 2,
@@ -278,7 +161,18 @@
         },
 
         created() {
-            
+            this.FETCH_GRAPH().then(res => {
+                res.nodes.forEach(item => {
+                    item.shape = "image";
+                    item.image = people;
+                });
+                res.edges.forEach(item => {
+                    item.value = item.count;
+                });
+
+                this.nodes = res.nodes;
+                this.edges = res.edges;
+            });
         },
 
         watch: {
@@ -286,7 +180,7 @@
         },
 
         methods: {
-
+            ...mapActions(["FETCH_GRAPH", "FETCH_USER_ARTICLES"]),
             updateFilter() {
               this.filterShow = false;
             },
@@ -349,12 +243,28 @@
                 this.statusModal = false;
             },
 
-            onNodeSelected(a) {
-                console.log(a);
+            onNodeSelected(data) {
+                const node = data.nodes[0];
+                const name = this.nodes.find(item => item.id === node)?.label;
+
+                if(node) {
+                    this.FETCH_USER_ARTICLES(node)
+                        .then(res => {
+                            this.sidebarmenu.users = [name],
+                            this.sidebarmenu.articles = res.articles;
+
+                            this.statusModal = true;
+                        });
+                }
             },
 
-            networkEvent() {
-                this.statusModal = true;
+            networkEvent(data) {
+                const edgeId = data.edges[0];
+                console.log(edgeId);
+                // const edge = this.edges.find(item )
+
+                // this.FETCH_USER_ARTICLES
+                // this.statusModal = true;
             }
 
         },

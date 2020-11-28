@@ -20,13 +20,13 @@
           striped
           hover
           fixed
-          :items="table.items"
+          :items="this.GET_DEPARTS.departments"
           :fields="table.fields"
         ></b-table>
       </div>
     </div>
     <div class="main__right">
-      <FilterComponent :filterMas="filter" />
+      <FilterComponent :filterMas="filter" @update-filter="changeFilters" />
     </div>
   </div>
 </template>
@@ -34,6 +34,7 @@
 <script>
 import StatsCounter from "../components/StatsCouter";
 import FilterComponent from "../components/FilterComponent";
+import { mapActions, mapGetters } from "vuex";
 
 export default {
   name: "Main",
@@ -41,60 +42,14 @@ export default {
 
   data() {
     return {
-      topics: [
-        { count: 135, name: "Всего авторов" },
-        { count: 3155, name: "Всего статей" },
-        { count: 1621, name: "Статей подразделений" },
-        { count: 8071, name: "Кол-во цитирований" },
-      ],
       table: {
         fields: [
-          { key: "subdivision", label: "Подразделение" },
-          { key: "totalAuthors", label: "Всего авторов" },
-          { key: "totalArticlesByAuthor", label: "Всего статей авторов" },
+          { key: "name", label: "Подразделение" },
+          { key: "authors", label: "Всего авторов" },
+          { key: "authors_publish", label: "Всего статей авторов" },
           {
-            key: "totalSubdivisionsArticles",
+            key: "all_publish",
             label: "Всего статей подразделений",
-          },
-        ],
-
-        items: [
-          {
-            subdivision: "Факультеты (институты)",
-            totalAuthors: 291,
-            totalArticlesByAuthor: 2939,
-            totalSubdivisionsArticles: 1695,
-          },
-          {
-            subdivision: "НР и ИД",
-            totalAuthors: 10,
-            totalArticlesByAuthor: 158,
-            totalSubdivisionsArticles: 106,
-          },
-          {
-            subdivision:
-              "Управление стратегического развития и системы качества",
-            totalAuthors: 2,
-            totalArticlesByAuthor: 36,
-            totalSubdivisionsArticles: 36,
-          },
-          {
-            subdivision: "Филиалы",
-            totalAuthors: 1,
-            totalArticlesByAuthor: 10,
-            totalSubdivisionsArticles: 10,
-          },
-          {
-            subdivision: "Первый проректор",
-            totalAuthors: 2,
-            totalArticlesByAuthor: 6,
-            totalSubdivisionsArticles: 6,
-          },
-          {
-            subdivision: "В и СР",
-            totalAuthors: 1,
-            totalArticlesByAuthor: 7,
-            totalSubdivisionsArticles: 3,
           },
         ],
       },
@@ -109,6 +64,30 @@ export default {
         ],
       },
     };
+  },
+
+  computed: {
+    ...mapGetters(["GET_DEPARTS"]),
+
+    topics() {
+      return [
+        { count: this.GET_DEPARTS.authors, name: "Всего авторов" },
+        { count: +this.GET_DEPARTS.articles, name: "Всего статей" },
+        { count: this.GET_DEPARTS.dep_articles, name: "Статей подразделений" },
+        { count: this.GET_DEPARTS.citation, name: "Кол-во цитирований" },
+      ];
+    },
+  },
+
+  methods: {
+    ...mapActions(["FETCH_DEPARTS"]),
+    changeFilters() {
+      this.FETCH_DEPARTS();
+    },
+  },
+
+  mounted() {
+    this.FETCH_DEPARTS();
   },
 };
 </script>
@@ -169,6 +148,11 @@ export default {
         color: #ffffff;
         padding: 32px 0px;
       }
+
+      & tr {
+        border: 2px solid #e5e7e9;
+        box-sizing: border-box;
+      }
     }
 
     & tbody {
@@ -179,6 +163,11 @@ export default {
         font-size: 18px;
         color: #827c93;
         padding: 20px 0px;
+      }
+
+      & tr {
+        border: 2px solid #e5e7e9;
+        box-sizing: border-box;
       }
     }
   }

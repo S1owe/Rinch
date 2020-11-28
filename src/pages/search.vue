@@ -45,7 +45,7 @@
           <span class="search__base-cap-text">Поиск сотрудников</span>
         </div>
 
-        <div class="search__search-results" key="results" v-if="showResults">
+        <div class="search__search-results" key="results" v-if="showResults && GET_USERS.length > 0">
           <b-table
             striped
             hover

@@ -20,57 +20,75 @@ const router = new VueRouter({
       path: '/',
       name: 'main',
       component: Main,
-      props: true
+      props: true,
+      meta: ["Подразделения"],
     },
     {
       path: '/auth',
       name: 'auth',
       component: Auth,
       props: true,
+      meta: ["Вход"],
     },
     {
       path: '/graph',
       name: 'graph',
       component: Graph,
       props: true,
+      meta: ["Графики активности"]
     },
     {
       path: '/network',
       name: 'network',
       component: Network,
       props: true,
+      meta: ["Научные интересы"]
     },
     {
       path: '/search',
       name: 'search',
       component: Search,
       props: true,
+      meta: ["Поиск сотрудников"]
     },
     {
       path: "/worker/:id",
       name: "Worker",
       component: Worker,
       props: true,
+      meta: ["Страница сотрудника"]
     },
     {
       path: '/team-rating/',
       name: 'team-rating',
       component: TeamRating,
       props: true,
+      meta: ["Командный рейтинг"]
     },
     {
       path: '/team/:id',
       name: 'team',
       component: Team,
       props: true,
+      meta: ["Страница команды"]
     },
     {
       path: '/comm',
       name: 'comm',
       component: Comm,
       props: true,
+      meta: ["Страница Коммерциализации"]
     },
   ],
+  scrollBehavior () {
+    return { x: 0, y: 0 }
+  }
 });
+
+// exlint-disable-next-line no-unused-vars
+router.beforeEach((to, from, next) => {
+  document.title = to.meta[0];
+  next();
+})
 
 export default router;
