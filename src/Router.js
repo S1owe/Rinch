@@ -6,6 +6,7 @@ Vue.use(VueRouter);
 import Auth from './pages/auth';
 import Main from './pages/main';
 import Graph from './pages/graph';
+import Network from './pages/Network'
 
 const router = new VueRouter({
   mode: 'history',
@@ -28,6 +29,12 @@ const router = new VueRouter({
       component: Graph,
       props: true,
     },
+  {
+      path: '/network',
+      name: 'network',
+      component: Network,
+      props: true,
+  },
   ],
 });
 

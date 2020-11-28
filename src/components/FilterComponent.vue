@@ -59,12 +59,11 @@
           <path d="M7 6L13.9282 0H0.0717969L7 6Z" fill="#E5E7E9"/>
         </svg>
         <select v-model="filter.type_graph">
-          <option value="doughnut">Круговая диаграмма</option>
-          <option value="horizontalBar">Полосовая диаграмма</option>
+          <option value="pie">Круговая диаграмма</option>
           <option value="bar">Столбчатая диаграмма</option>
+         <!-- <option value="horizontalBar">Полосовая диаграмма</option>
           <option value="line">Линейная диаграмма</option>
-          <option value="polarArea">Фигурная диаграмма</option>
-          <option value="bar2">Столбиковая диаграмма</option>
+          <option value="polarArea">Фигурная диаграмма</option>-->
         </select>
       </div>
     </div>
@@ -106,7 +105,7 @@
 
     </div>
 
-    <div class="btn_update_filter">Обновить</div>
+    <div class="btn_update_filter" @click="updateFilter">Обновить</div>
 
   </div>
 </template>
@@ -141,7 +140,7 @@ export default {
               unit_check_filter_publication_all: true,   // показать все / скрыть все
 
               // график
-              type_graph: "doughnut",
+              type_graph: "pie",
           },
       }
   },
@@ -176,10 +175,20 @@ export default {
     },
 
     watch: {
-
+      'filter.type_graph'(after, before) {
+            console.log(before);
+        }
     },
 
     methods: {
+
+        updateFilter() {
+            if (this.filterMas.page === 'graph') {
+                this.$emit('typechart', this.filter.type_graph)
+            }
+
+
+        },
         // выбрать все / снять выделения "выбрать все"
         select_all() {
             this.filter.check_filter_publication_all = !this.filter.check_filter_publication_all;

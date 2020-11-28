@@ -19,7 +19,6 @@ export default {
   background-color: #2f73ea;
   display: flex;
   justify-content: center;
-  margin-top: 10px;
 
   &__text {
     font-weight: normal;
