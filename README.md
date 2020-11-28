@@ -1,24 +1,21 @@
-# rgeu_1
+Для запуска проекта должен быть установлен npm, а также node.js
+https://nodejs.org/en/download/
 
-## Project setup
-```
-yarn install
-```
+Обратите внимание, что при разворачивании на Win хосте могут быть сложности с отсутсвием утилит в PATH
 
-### Compiles and hot-reloads for development
-```
-yarn serve
-```
+Что будет выдавать ошибки такого рода еще на этапе проверки версии:
 
-### Compiles and minifies for production
 ```
-yarn build
+B:\Downloads\Rinch-master\Rinch-master>node -v
+"node" не является внутренней или внешней
+командой, исполняемой программой или пакетным файлом.
 ```
 
-### Lints and fixes files
-```
-yarn lint
-```
+Поэтому рекомендуем использовать GIT Bash или схожий bash-терминал для Win, там все нормально работает сразу
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+После этого затяните себе проект из репозитория и в его корне выполните команды в следующей последовательности:
+
+1) npm install yarn -g
+2) npm install @vue/cli-service -g
+3) yarn install
+4) npm run serve
