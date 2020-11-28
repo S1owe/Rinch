@@ -9,26 +9,19 @@
 <script>
 import Header from "./components/Header";
 import Footer from "./components/Footer";
-<<<<<<< HEAD
 import http from "./services/httpService";
 import { mapActions, mapGetters } from "vuex";
-=======
->>>>>>> network_2
 
 export default {
   name: "App",
   components: { Header, Footer },
 
   computed: {
-<<<<<<< HEAD
     ...mapGetters(["GET_USER"]),
-=======
->>>>>>> network_2
     isAuth() {
       return this.$route.path === "/auth";
     },
   },
-<<<<<<< HEAD
 
   methods: {
     ...mapActions(["CHECK_USER"]),
@@ -58,8 +51,6 @@ export default {
       }
     });
   },
-=======
->>>>>>> network_2
 };
 </script>
 
