@@ -2,7 +2,7 @@
   <div>
     <button @click="is_show_modal = true">Открыть модалку!</button>
 
-    <ModalCreateCommand v-model="is_show_modal" />
+    <ModalCreateCommand v-model="is_show_modal" @send="send" />
   </div>
 </template>
 
@@ -13,7 +13,13 @@ export default {
   components: {ModalCreateCommand},
   data: function () {
     return {
-      is_show_modal: true
+      is_show_modal: false
+    }
+  },
+  methods: {
+    send: function (e) {
+      // eslint-disable-next-line
+      console.log(e);
     }
   }
 }
