@@ -1,5 +1,6 @@
 <template>
-  <div class="team">
+  <Loading :times="300" v-if="!is_show" />
+  <div class="team" v-else>
     <div class="team__header">
       <h1 class="team__header-title">{{ name }}</h1>
 
@@ -65,47 +66,51 @@
 import { Network } from "vue-vis-network";
 import { CalendarHeatmap } from "vue-calendar-heatmap";
 import PublicationsBlock from "../components/PublicationsBlock";
+import http from "@/services/httpService";
 
 import people from "../assets/people.png";
+import Loading from "@/components/Loading";
 
 export default {
   name: "Team",
-  components: { CalendarHeatmap, PublicationsBlock, Network },
+  components: {Loading, CalendarHeatmap, PublicationsBlock, Network },
+  props: ['id'],
 
   data() {
     return {
-      name: "Procent",
+      is_show: false,
+      name: "",
 
       topics: [
-        "Сетевое моделирование",
-        "Пространственная эпидемиология",
-        "Транспортные системы",
-        "Artificial Intelligence",
-        "Software",
-        "Hardware and Architecture",
+        // "Сетевое моделирование",
+        // "Пространственная эпидемиология",
+        // "Транспортные системы",
+        // "Artificial Intelligence",
+        // "Software",
+        // "Hardware and Architecture",
       ],
 
       members: [
-        {
-          name: "Митрохин Максим Александрович",
-          position: "Кандидат технических наук Доцент",
-        },
-        {
-          name: "Митрохин Максим Александрович",
-          position: "Доктор технических наук Профессор",
-        },
-        {
-          name: "Митрохин Максим Александрович",
-          position: "Старший научный сотрудник",
-        },
-        {
-          name: "Митрохина Наталья Юрьевна",
-          position: "Кандидат технических наук Доцент",
-        },
+        // {
+        //   name: "Митрохин Максим Александрович",
+        //   position: "Кандидат технических наук Доцент",
+        // },
+        // {
+        //   name: "Митрохин Максим Александрович",
+        //   position: "Доктор технических наук Профессор",
+        // },
+        // {
+        //   name: "Митрохин Максим Александрович",
+        //   position: "Старший научный сотрудник",
+        // },
+        // {
+        //   name: "Митрохина Наталья Юрьевна",
+        //   position: "Кандидат технических наук Доцент",
+        // },
       ],
 
-      description:
-        "Мое исследование сосредоточено на продвижении современных достижений в области планирования эпидемий на основе данных и принятия решений с целью предоставления рекомендаций по оценке и контролю вспышек на основе наилучших имеющихся данных. В частности, я возглавляю работу над интерактивной веб-панелью мониторинга, которую органы общественного здравоохранения, исследователи и широкая общественность во всем мире используют для отслеживания вспышки нового коронавируса в 2020 году.",
+      description: "",
+        // "Мое исследование сосредоточено на продвижении современных достижений в области планирования эпидемий на основе данных и принятия решений с целью предоставления рекомендаций по оценке и контролю вспышек на основе наилучших имеющихся данных. В частности, я возглавляю работу над интерактивной веб-панелью мониторинга, которую органы общественного здравоохранения, исследователи и широкая общественность во всем мире используют для отслеживания вспышки нового коронавируса в 2020 году.",
 
       heatmap: {
         values: [
@@ -127,46 +132,46 @@ export default {
       },
 
       publications: [
-        {
-          date: "2020-9-22",
-          name:
-            "Symmetric guided electromagnetic waves in a shielded slab filled with anisotropic dielectric",
-        },
-        {
-          date: "2020-10-22",
-          name:
-            "Symmetric guided electromagnetic waves in a shielded slab filled with anisotropic dielectric",
-        },
-        {
-          date: "2019-9-22",
-          name:
-            "Symmetric guided electromagnetic waves in a shielded slab filled with anisotropic dielectric",
-        },
-        {
-          date: "2018-10-22",
-          name:
-            "Symmetric guided electromagnetic waves in a shielded slab filled with anisotropic dielectric",
-        },
-        {
-          date: "2020-10-25",
-          name:
-            "Symmetric guided electromagnetic waves in a shielded slab filled with anisotropic dielectric",
-        },
-        {
-          date: "2020-10-22",
-          name:
-            "Symmetric guided electromagnetic waves in a shielded slab filled with anisotropic dielectric",
-        },
-        {
-          date: "2019-10-25",
-          name:
-            "Symmetric guided electromagnetic waves in a shielded slab filled with anisotropic dielectric",
-        },
-        {
-          date: "2019-11-25",
-          name:
-            "Symmetric guided electromagnetic waves in a shielded slab filled with anisotropic dielectric",
-        },
+        // {
+        //   date: "2020-9-22",
+        //   name:
+        //     "Symmetric guided electromagnetic waves in a shielded slab filled with anisotropic dielectric",
+        // },
+        // {
+        //   date: "2020-10-22",
+        //   name:
+        //     "Symmetric guided electromagnetic waves in a shielded slab filled with anisotropic dielectric",
+        // },
+        // {
+        //   date: "2019-9-22",
+        //   name:
+        //     "Symmetric guided electromagnetic waves in a shielded slab filled with anisotropic dielectric",
+        // },
+        // {
+        //   date: "2018-10-22",
+        //   name:
+        //     "Symmetric guided electromagnetic waves in a shielded slab filled with anisotropic dielectric",
+        // },
+        // {
+        //   date: "2020-10-25",
+        //   name:
+        //     "Symmetric guided electromagnetic waves in a shielded slab filled with anisotropic dielectric",
+        // },
+        // {
+        //   date: "2020-10-22",
+        //   name:
+        //     "Symmetric guided electromagnetic waves in a shielded slab filled with anisotropic dielectric",
+        // },
+        // {
+        //   date: "2019-10-25",
+        //   name:
+        //     "Symmetric guided electromagnetic waves in a shielded slab filled with anisotropic dielectric",
+        // },
+        // {
+        //   date: "2019-11-25",
+        //   name:
+        //     "Symmetric guided electromagnetic waves in a shielded slab filled with anisotropic dielectric",
+        // },
       ],
 
       options: {
@@ -221,6 +226,35 @@ export default {
       ],
     };
   },
+  created() {
+    http.post('api/api.php', {
+      module: 'get_team',
+      id: this.id
+    }).then(response => {
+      console.log(response.data);
+      this.name = response.data.info.title;
+      this.topics = response.data.topics;
+      this.members = response.data.members;
+      this.description = response.data.info.description;
+      this.publications = response.data.activity.map(a => {
+        return {
+          id: a.id,
+          name: a.title,
+          date: a.year
+        }
+      });
+      this.nodes = response.data.nodes.map(n => {
+        return {
+          id: n.id,
+          label: n.label,
+          shape: "image",
+          image: people
+        }
+      });
+      this.edges = response.data.edges;
+      this.is_show = true;
+    });
+  }
 };
 </script>
 

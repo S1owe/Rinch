@@ -38,7 +38,7 @@
         <div class="publications-block__mounthCard-date">{{ item.date }}</div>
       </div>
 
-      <span class="publications-block__show-all" @click="showAll">
+      <span class="publications-block__show-all" style="cursor: pointer;" @click="showAll">
         {{ showBtn }}
       </span>
     </div>

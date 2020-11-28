@@ -51,7 +51,7 @@
             hover
             fixed
             :items="GET_USERS"
-            :fields="results.fields"
+            :fields="results.fields" :selectable="true"
             @row-clicked="handleClick"
           ></b-table>
         </div>
