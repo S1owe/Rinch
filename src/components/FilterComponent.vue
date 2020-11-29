@@ -51,7 +51,7 @@
         <div class="filter_title">Цитирований от:</div>
         <input type="number" name="filter_citation_search" placeholder="0" v-model="filter.count_citation">
     </div>
-    <div class="type_graph">
+    <div class="type_graph" v-show="!withoutGraphicType">
       <div class="filter_title">Тип графика</div>
 
       <div class="filter_graph_select">
@@ -118,6 +118,10 @@ export default {
   name: "FilterComponent",
   props: {
       filterMas: Object,   // page: employee - стр. сотр. graph - стр. графа, unit - стр. подразделений
+      withoutGraphicType: {
+        type: Boolean,
+        default: false,
+      }
   },
 
   data() {

@@ -12,6 +12,7 @@ const store = new Vuex.Store({
   state: {
     user: {
       token: localStorage.getItem('token') || '',
+      name_cut: '',
     },
     users: [],
     worker: {},
@@ -33,6 +34,9 @@ const store = new Vuex.Store({
     SET_DEPARTS: (state, departs) => {
       state.departs = departs;
     },
+    SET_USER_NAME: (state, name) => {
+      state.user.name_cut = name;
+    }
   },
   actions: {
     LOGIN_USER({ commit }, { login, password }) {
@@ -52,7 +56,7 @@ const store = new Vuex.Store({
     },
     CHECK_USER({ state }) {
       if (state.user.token.trim())
-        return checkUser(state.user.token)
+        return checkUser(state.user.token);
       else
         return false;
     },

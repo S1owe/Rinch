@@ -46,7 +46,7 @@
     </div>
 
     <div class="team__network">
-      <h3 class="team__network-title">Проектная активность сотрудников:</h3>
+      <h3 class="team__network-title">Научная активность команды проекта:</h3>
 
       <div class="team__network-graph">
         <network

@@ -26,7 +26,7 @@
       </div>
     </div>
     <div class="main__right">
-      <FilterComponent :filterMas="filter" @update-filter="changeFilters" />
+      <FilterComponent :filterMas="filter" @update-filter="changeFilters" :without-graphic-type="true" />
     </div>
   </div>
 </template>

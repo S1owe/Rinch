@@ -66,6 +66,7 @@
         <FilterComponent
           :filterMas="getFillter"
           @update-filter="changeFilters"
+          :without-graphic-type="true"
         />
       </div>
     </div>
@@ -119,9 +120,9 @@ export default {
           { key: "index", label: "№" },
           { key: "title", label: "Название" },
           { key: "publish_place", label: "Место публикации" },
-          { key: "year", label: "Дата публикации" },
+          { key: "year", label: "Дата регистрации РИД" },
           { key: "cit", label: "Кол-во цитирований" },
-          { key: "commerc", label: "Коммерциализация" },
+          { key: "commerc", label: "Коммерц." },
         ],
       },
 

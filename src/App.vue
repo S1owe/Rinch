@@ -10,7 +10,7 @@
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import http from "./services/httpService";
-import { mapActions, mapGetters } from "vuex";
+import { mapActions, mapGetters, mapMutations } from "vuex";
 
 export default {
   name: "App",
@@ -25,6 +25,7 @@ export default {
 
   methods: {
     ...mapActions(["CHECK_USER"]),
+    ...mapMutations(["SET_USER_NAME"])
   },
 
   created() {
@@ -46,6 +47,8 @@ export default {
     );
 
     this.CHECK_USER(this.GET_USER.token).then((res) => {
+      this.SET_USER_NAME(res?.data?.name_cut);
+
       if (!res && !res?.data?.auth && !this.isAuth) {
         this.$router.push({ name: "auth" });
       }

@@ -20,7 +20,7 @@
     </div>
 
     <div class="header__userInfo">
-      <span class="header__userName">{{ userName }}</span>
+      <span class="header__userName">{{ GET_USER.name_cut }}</span>
 
       <button class="header__logout-icon" @click="logout">
         <svg
@@ -59,18 +59,11 @@
 
 <script>
 import Logo from "./Logo";
-import { mapActions } from "vuex";
+import { mapActions,mapGetters } from "vuex";
 
 export default {
   name: "Header",
   components: { Logo },
-
-  props: {
-    userName: {
-      type: String,
-      default: "Кузьмин М.Ю.",
-    },
-  },
 
   data() {
     return {
@@ -85,6 +78,7 @@ export default {
   },
 
   computed: {
+    ...mapGetters(["GET_USER"]),
     currentPath() {
       return this.$route.path;
     },
