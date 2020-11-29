@@ -25,7 +25,7 @@ export default {
 
 <style lang='scss' scoped>
 .stats-counter {
-  padding: 18px 45px;
+  padding: 18px 40px;
   box-sizing: border-box;
   background-color: #2f73ea;
   display: flex;
