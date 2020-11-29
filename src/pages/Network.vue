@@ -17,13 +17,13 @@
 
                         <div class="filter_third_container" v-bind:class="{ filter_padding: filter.filter_subdivision_show}">
 
-                            <div class="filter_third_check filter_third_first" v-bind:class="{ filter_third_padding: filter.filter_subdivision_show}">
+<!--                            <div class="filter_third_check filter_third_first" v-bind:class="{ filter_third_padding: filter.filter_subdivision_show}">
                                 <input type="checkbox" id="filter_check_all" @click="select_all()" ref="test" checked>
                                 <label for="filter_check_all">
                                     <span class="checkbox__icon"></span>
                                     <a>Все</a>
                                 </label>
-                            </div>
+                            </div>-->
 
 
                             <div class="filter_third_check" v-for="(types_of_publications, index) in filter.types_of_publication" :key="'filter_publish_' + index">
@@ -32,7 +32,7 @@
                                      v-bind:class="{ disable_input: (index >= 3) && (!filter.filter_subdivision_show)}"
                                      v-if="((filter.filter_subdivision_show) || (index <= 3))"
                                 >
-                                    <input type="checkbox" :id="'filter_' + (index) + '_check'" :value="types_of_publications" @click="check_all_checked(types_of_publications)" v-model="filter.selected">
+                                    <input type="checkbox" :id="'filter_' + (index) + '_check'" :value="types_of_publications" @click="(e) => filter.selected === types_of_publications ? e.preventDefault() : filter.selected = types_of_publications" :checked="filter.selected === types_of_publications">
 
                                     <label :for="'filter_' + (index) + '_check'">
                                         <span class="checkbox__icon"></span>
@@ -108,6 +108,7 @@
     import { Network } from "vue-vis-network";
     import { mapActions } from 'vuex';
     import people from '../assets/people.png';
+    import http from "@/services/httpService";
 
     export default {
         name: "Network",
@@ -115,12 +116,13 @@
             return {
                 statusModal: false,
                 filterShow: false,
+                obj_reverse: [],
 
                 filter: {
                     filter_subdivision_show: false, // visibility расширенного списка подразделений
                     btn_show_text: "Показать всё",
-                    types_of_publication: ['BigDate','Front-end','Ux','UI','Algorithm','Сборник статей, трудов','Статья','Издательство1','Статья1','Тестовое имя1', 'Книга'],
-                    selected: ['BigDate','Front-end','Ux','UI','Algorithm','Сборник статей, трудов','Статья','Издательство1','Статья1','Тестовое имя1', 'Книга'],
+                    types_of_publication: [],
+                    selected: '',
                     check_filter_publication_all: true,   // показать все / скрыть все
                 },
 
@@ -173,6 +175,16 @@
                 this.nodes = res.nodes;
                 this.edges = res.edges;
             });
+
+          http.post('api/api.php', {
+            module: 'get_articles_types'
+          }).then(response => {
+            this.filter.types_of_publication = response.data.types.map(t => t.name);
+            this.filter.selected = response.data.types.find(t => t.id == 4).name;
+            response.data.types.forEach(t => {
+              this.obj_reverse[t.name] = t.id;
+            });
+          });
         },
 
         watch: {
@@ -183,6 +195,22 @@
             ...mapActions(["FETCH_GRAPH", "FETCH_USER_ARTICLES"]),
             updateFilter() {
               this.filterShow = false;
+              http.post('/api/api.php', {
+                module: 'main_graph',
+                theme: this.obj_reverse[this.filter.selected]
+              }).then(res => {
+                res = res.data;
+                res.nodes.forEach(item => {
+                  item.shape = "image";
+                  item.image = people;
+                });
+                res.edges.forEach(item => {
+                  item.value = item.count;
+                });
+
+                this.nodes = res.nodes;
+                this.edges = res.edges;
+              });
             },
 
             select_all() {
@@ -244,6 +272,7 @@
             },
 
             onNodeSelected(data) {
+              // console.log(data);
                 const node = data.nodes[0];
                 const name = this.nodes.find(item => item.id === node)?.label;
 
@@ -263,14 +292,26 @@
                 const edge = this.edges.find(item => item.id === edgeId);
                 const { to, from } = edge;
                 const users = this.nodes.filter(item => item.id === to || item.id === from).map(item => item.label);
-                
-                this.FETCH_USER_ARTICLES(to, from)
+
+              http.post('/api/api.php', {
+                module: 'graph_edge',
+                user_1: to,
+                user_2: from,
+              }).then(res => {
+                res = res.data;
+                this.sidebarmenu.users = users;
+                this.sidebarmenu.articles = res.articles;
+
+                this.statusModal = true;
+              })
+
+                /*this.FETCH_USER_ARTICLES(to, from)
                     .then(res => {
                         this.sidebarmenu.users = users;
                         this.sidebarmenu.articles = res.articles;
 
                         this.statusModal = true;
-                    })
+                    })*/
                 // this.statusModal = true;
             }
 

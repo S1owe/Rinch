@@ -1,5 +1,6 @@
 <template>
-    <div class="commercialization">
+  <Loading v-if="!is_show" />
+    <div v-else class="commercialization">
         <h1>{{title}}</h1>
         
         <div class="containerM">
@@ -17,7 +18,7 @@
                 <div class="item" v-for="(item, i) in table.fields" :key="'table_h_' + i">{{item.label}}</div>
             </div>
             <div class="contentTable">
-                <div class="row" v-for="(item, i) in table.items" :key="'table_r_' + i">
+                <div class="row" v-for="(item, i) in table.items" :key="'table_r_' + i" style="cursor: default;">
                     <div class="item">{{item.number}}</div>
                     <div class="item">{{removeTitle(item.title)}}</div>
                     <div class="item">{{removeTitle(item.address)}}</div>
@@ -31,10 +32,15 @@
 </template>
 
 <script>
+import http from "@/services/httpService";
+import Loading from "@/components/Loading";
+
     export default {
         name: "comm",
+      props: ['id'],
         data() {
             return {
+              is_show: false,
                 title: 'Semisupervised learning in pattern',
                 theme: 'BigData',
                 date: '20.20.19',
@@ -49,34 +55,34 @@
                     ],
 
                     items: [
-                        {
-                            number: 1,
-                            title: 'Производственная компания «Новочеркасский электровозостроительный завод» (ПК «НЭВЗ»)',
-                            address: '344064, Россия, Ростовская область, г. Ростов-на-Дону, ул. Вавилова, 68/1',
-                            tel: '22-99-24',
-                            email: 'info@fdpro.com',
-                        },
-                        {
-                            number: 2,
-                            title: 'Производственная компания «Новочеркасский электровозостроительный завод» (ПК «НЭВЗ»)',
-                            address: '344064, Россия, Ростовская область, г. Ростов-на-Дону, ул. Вавилова, 68/1',
-                            tel: '22-99-24',
-                            email: 'info@fdpro.com',
-                        },
-                        {
-                            number: 3,
-                            title: 'Производственная компания «Новочеркасский электровозостроительный завод» (ПК «НЭВЗ»)',
-                            address: '344064, Россия, Ростовская область, г. Ростов-на-Дону, ул. Вавилова, 68/1',
-                            tel: '22-99-24',
-                            email: 'info@fdpro.com',
-                        },
-                        {
-                            number: 4,
-                            title: 'Производственная компания «Новочеркасский электровозостроительный завод» (ПК «НЭВЗ»)',
-                            address: '344064, Россия, Ростовская область, г. Ростов-на-Дону, ул. Вавилова, 68/1',
-                            tel: '22-99-24',
-                            email: 'info@fdpro.com',
-                        }
+                        // {
+                        //     number: 1,
+                        //     title: 'Производственная компания «Новочеркасский электровозостроительный завод» (ПК «НЭВЗ»)',
+                        //     address: '344064, Россия, Ростовская область, г. Ростов-на-Дону, ул. Вавилова, 68/1',
+                        //     tel: '22-99-24',
+                        //     email: 'info@fdpro.com',
+                        // },
+                        // {
+                        //     number: 2,
+                        //     title: 'Производственная компания «Новочеркасский электровозостроительный завод» (ПК «НЭВЗ»)',
+                        //     address: '344064, Россия, Ростовская область, г. Ростов-на-Дону, ул. Вавилова, 68/1',
+                        //     tel: '22-99-24',
+                        //     email: 'info@fdpro.com',
+                        // },
+                        // {
+                        //     number: 3,
+                        //     title: 'Производственная компания «Новочеркасский электровозостроительный завод» (ПК «НЭВЗ»)',
+                        //     address: '344064, Россия, Ростовская область, г. Ростов-на-Дону, ул. Вавилова, 68/1',
+                        //     tel: '22-99-24',
+                        //     email: 'info@fdpro.com',
+                        // },
+                        // {
+                        //     number: 4,
+                        //     title: 'Производственная компания «Новочеркасский электровозостроительный завод» (ПК «НЭВЗ»)',
+                        //     address: '344064, Россия, Ростовская область, г. Ростов-на-Дону, ул. Вавилова, 68/1',
+                        //     tel: '22-99-24',
+                        //     email: 'info@fdpro.com',
+                        // }
                     ],
                 },
             }
@@ -87,7 +93,25 @@
         },
 
         created() {
-
+          http.post('/api/api.php', {
+            module: 'get_offers',
+            id: this.id
+          }).then(response => {
+            this.title = response.data.article.title;
+            this.theme = response.data.article.theme;
+            this.date = response.data.article.date;
+            let number = 1;
+            this.table.items = response.data.offers.map(o => {
+              return {
+                number: number++,
+                title: o.name,
+                address: o.address,
+                tel: o.tel,
+                email: o.email
+              }
+            });
+            this.is_show = true;
+          });
         },
 
         methods: {
@@ -102,6 +126,7 @@
         },
 
         components: {
+          Loading
 
         }
     }

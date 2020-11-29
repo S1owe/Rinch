@@ -1,5 +1,6 @@
 <template>
-  <div class="worker">
+  <Loading v-if="!is_show" />
+  <div class="worker" v-else>
     <div class="worker__main">
       <div class="worker__left">
         <div class="worker__title">
@@ -44,6 +45,7 @@
             hover
             :items="GET_WORKER.articles"
             :fields="table.fields"
+            class="td-min-w"
           >
             <template #cell(index)="data">
               {{ data.index + 1 }}
@@ -51,9 +53,9 @@
 
             <template #cell(commerc)="data">
               <router-link
-                v-if="data.value && data.value.to"
+                v-if="data.item.offers == 1"
                 class="worker__table-link"
-                :to="data.value.to"
+                :to="{name: 'comm', params: {id: data.item.id}}"
               >
                 Просмотр
               </router-link>
@@ -105,13 +107,16 @@
 import StatsCounter from "../components/StatsCouter";
 import FilterComponent from "../components/FilterComponent";
 import { mapGetters, mapActions, mapMutations } from "vuex";
+import Loading from "@/components/Loading";
 
 export default {
   name: "Worker",
-  components: { StatsCounter, FilterComponent },
+  components: {Loading, StatsCounter, FilterComponent },
+  props: ['id'],
 
   data() {
     return {
+      is_show: false,
       publicTypes: [],
       name: "Митрохин Максим Александрович",
 
@@ -201,7 +206,7 @@ export default {
     this.FETCH_PUB_TYPES().then((res) => {
       this.publicTypes = res.types.map((item) => item.name);
     });
-    this.FETCH_WORKER({ id: this.$route.params.id });
+    this.FETCH_WORKER({ id: this.id }).then(() => this.is_show = true);
   },
 
   beforeDestroy() {
@@ -209,6 +214,12 @@ export default {
   },
 };
 </script>
+
+<style lang="scss">
+.td-min-w td {
+  min-width: 10rem;
+}
+</style>
 
 <style lang="scss" scoped>
 .worker {

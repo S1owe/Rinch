@@ -73,7 +73,7 @@ const router = new VueRouter({
       meta: ["Страница команды"]
     },
     {
-      path: '/comm',
+      path: '/comm/:id',
       name: 'comm',
       component: Comm,
       props: true,
