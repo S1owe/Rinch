@@ -1,5 +1,5 @@
 <template>
-  <div id="app" class="b-flex flex-column justify-content-between">
+  <div id="app" class="d-flex flex-column justify-content-between">
     <Header v-if="!isAuth" />
     <transition name="global" mode="out-in" appear>
       <router-view class="component flex-grow-1" :key="$route.path" />
