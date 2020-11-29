@@ -456,7 +456,7 @@
         .contentTable {
             display: flex;
             flex-direction: column;
-            max-height: 650px;
+            max-height: calc(100vh - 500px);
             overflow: auto;
             color: #7C8793;
 
