@@ -1,5 +1,6 @@
 <template>
-    <div id="graph">
+  <Loading :times="300" v-if="!is_show" />
+    <div id="graph" v-else>
         <h1>Публикационная активность</h1>
         <h3>Всего работ: {{allPublications}}</h3>
         <div class="main_container">
@@ -33,7 +34,7 @@
                 </div>
             </div>
 
-            <FilterComponent @typechart="chartType" @set_new_types="set_new_types" :types="types" :filterMas="filter"></FilterComponent>
+            <FilterComponent @typechart="chartType" @filter_full_data="set_new_types" :filterMas="filter"></FilterComponent>
         </div>
     </div>
 </template>
@@ -43,15 +44,13 @@
     import Chart from 'vue-chartless';
     import TrendChart from "vue-trend-chart";
     import http from "@/services/httpService";
+    import Loading from "@/components/Loading";
 
     export default {
         name: "graph",
         data() {
             return {
-              types: [],
-              typesAll:[],
-
-
+              is_show: false,
 
                 allPublications: 0,
                 showGraph: true,
@@ -66,10 +65,10 @@
                     type: 'pie'
                 },
                 data: [
-                    {label: 'London', value: '330'},
-                    {label: 'Barcelona', value: '430'},
-                    {label: 'Paris', value: '150'},
-                    {label: 'London13', value: '330'},
+                    // {label: 'London', value: '330'},
+                    // {label: 'Barcelona', value: '430'},
+                    // {label: 'Paris', value: '150'},
+                    // {label: 'London13', value: '330'},
                 ],
 
                 // line graph
@@ -116,20 +115,15 @@
 
         created() {
           http.post('api/api.php', {
-            module: 'get_articles_types'
-          }).then(response => {
-            this.typesAll = response.data.types;
-          });
-
-          http.post('api/api.php', {
             module: 'graph'
           }).then(response => {
-            this.types = response.data.graph.map(g => {
+            this.data = response.data.graph.map(g => {
               return {
                 label: g.type,
                 value: g.cn
               }
             });
+            this.is_show = true;
           });
         },
 
@@ -139,8 +133,19 @@
 
         methods: {
           set_new_types(data) {
-            console.log("Number: ");
-            console.log(data);
+            http.post('api/api.php', {
+              module: 'graph',
+              start: data.date_first.slice(0, 4),
+              end: data.date_second.slice(0, 4),
+              type: data.types.map(t => t.id)
+            }).then(responsse => {
+              this.data = responsse.data.graph.map(g => {
+                return {
+                  label: g.type,
+                  value: g.cn
+                }
+              });
+            });
           },
             chartType(data) {
                 this.def.type = data;
@@ -151,6 +156,7 @@
         },
 
         components: {
+          Loading,
             FilterComponent,
             Chart,
             TrendChart

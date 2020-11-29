@@ -113,16 +113,17 @@
 <script>
 
 import datepicker from '../components/vue-date-picker';
+import http from "@/services/httpService";
 
 export default {
   name: "FilterComponent",
   props: {
-      filterMas: Object,   // page: employee - стр. сотр. graph - стр. графа, unit - стр. подразделений
-    types: Array
+      filterMas: Object   // page: employee - стр. сотр. graph - стр. графа, unit - стр. подразделений
   },
 
   data() {
       return {
+        obj_reverse: {},
           filter: {
               date_first: '',
               date_second: '',
@@ -163,8 +164,16 @@ export default {
 
         console.log(this.filterMas.page);
 
-        this.filter.types_of_publication = this.types.map(t => t.label);
-        this.filter.selected = this.types.map(t => t.label);
+        http.post('api/api.php', {
+          module: 'get_articles_types'
+        }).then(response => {
+          // this.typesAll = response.data.types;
+          this.filter.types_of_publication = response.data.types.map(t => t.name);
+          this.filter.selected = response.data.types.map(t => t.name);
+          response.data.types.forEach(t => {
+            this.obj_reverse[t.name] = t.id;
+          });
+        });
 
         if (this.filterMas.page === 'graph') {
             this.filter.unit_types_of_publication = this.filterMas.unit_types_of_publication;
@@ -188,7 +197,19 @@ export default {
                 this.$emit('typechart', this.filter.type_graph)
             }
 
-            this.$emit('update-filter', this.filter)
+            this.$emit('update-filter', this.filter);
+
+            this.$emit('filter_full_data', {
+              types: this.filter.selected.reduce((prev, e) => {
+                        let id = this.obj_reverse[e];
+                        if (prev.findIndex(a => a.id === id) === -1)
+                          prev.push({id: id, value: e});
+                        return prev;
+                      }, []),
+              date_first: this.filter.date_first,
+              date_second: this.filter.date_second,
+              count_citation: this.filter.count_citation
+            });
         },
         // выбрать все / снять выделения "выбрать все"
         select_all() {

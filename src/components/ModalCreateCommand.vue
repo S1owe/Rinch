@@ -253,6 +253,16 @@ export default {
     }
   },
   created() {
+    http.post('api/api.php?PHPSESSID=' + this.$store.state.user.token, {
+      module: 'check_auth'
+    }).then(response => {
+      this.this_author = {
+        id: response.data.id,
+        name: response.data.name,
+        rating: response.data.rating
+      };
+    });
+
     http.post('api/api.php', {
       module: 'get_types'
     }).then(response => {

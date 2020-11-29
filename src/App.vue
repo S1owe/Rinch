@@ -63,6 +63,10 @@ export default {
   position: relative;
 }
 
+body {
+  min-width: 1617px;
+}
+
 .btn-outline-info {
   color: #2f73ea !important;
   border-color: #2f73ea !important;
