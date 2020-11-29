@@ -2,7 +2,7 @@
   <div class="main">
     <div class="main__left">
       <div class="main__title">
-        <h1 class="main__title-text">Экономическая безопасность</h1>
+        <h1 class="main__title-text">РГЭУ (РИНХ)</h1>
       </div>
 
       <div class="main__topics">

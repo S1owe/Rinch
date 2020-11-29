@@ -4,6 +4,9 @@
 
         <transition name="fade">
             <div class="filter_background" v-if="filterShow">
+
+              <div class="closer" @click="filterShow = false"></div>
+
                 <div class="filter_container">
                     <svg @click="filterShow = false" width="46" height="46" viewBox="0 0 46 46" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path fill-rule="evenodd" clip-rule="evenodd" d="M22.6277 20.7418L31.1129 12.2565L32.9986 14.1422L24.5133 22.6274L32.9986 31.1127L31.1129 32.9983L22.6277 24.5131L14.1424 32.9983L12.2568 31.1127L20.742 22.6274L12.2568 14.1422L14.1424 12.2565L22.6277 20.7418Z" fill="#2F73EA"/>
@@ -355,14 +358,14 @@
     }
 
     .wrapper{
-        min-height: 85vh;
+        min-height: calc(100vh - 310px);
         border: 1px solid #878787;
         background-color: #fff;
         padding: 10px;
-        height: 85vh;
+        height: calc(100vh - 310px);
     }
     #network {
-        padding: 70px 120px;
+        padding: 10px 120px;
         position: relative;
         overflow: hidden;
     }
@@ -456,7 +459,7 @@
         .contentTable {
             display: flex;
             flex-direction: column;
-            max-height: calc(100vh - 500px);
+            max-height: calc(100vh - 475px);
             overflow: auto;
             color: #7C8793;
 
@@ -714,13 +717,21 @@
         width: 100%;
         height: 100%;
         display: flex;
-        padding-top: 200px;
+        padding-top: 50px;
         justify-content: center;
         position: absolute;
         background-color: rgba(0, 0, 0, 0.76);
         z-index: 20;
         left: 0;
         top: 0;
+
+      .closer {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+      }
     }
 
     
