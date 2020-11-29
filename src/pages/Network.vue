@@ -32,7 +32,8 @@
                                      v-bind:class="{ disable_input: (index >= 3) && (!filter.filter_subdivision_show)}"
                                      v-if="((filter.filter_subdivision_show) || (index <= 3))"
                                 >
-                                    <input type="checkbox" :id="'filter_' + (index) + '_check'" :value="types_of_publications" @click="(e) => filter.selected === types_of_publications ? e.preventDefault() : filter.selected = types_of_publications" :checked="filter.selected === types_of_publications">
+                                    <input type="checkbox" :id="'filter_' + (index) + '_check'" :value="types_of_publications"
+                                           @click="click_checkbox($event, types_of_publications)" :checked="filter.selected === types_of_publications">
 
                                     <label :for="'filter_' + (index) + '_check'">
                                         <span class="checkbox__icon"></span>
@@ -92,7 +93,7 @@
                    <div class="item" v-for="(item, i) in table.fields" :key="'table_h_' + i">{{item.label}}</div>
                </div>
                 <div class="contentTable">
-                    <div class="row" v-for="(item, i) in sidebarmenu.articles" :key="'table_r_' + i">
+                    <div class="row" v-for="(item, i) in sidebarmenu.articles" :key="'table_r_' + i" style="cursor: default;">
                         <div class="item">{{i + 1}}</div>
                         <div class="item">{{removeTitle(item.title)}}</div>
                         <div class="item">{{item.year}}</div>
@@ -193,6 +194,14 @@
 
         methods: {
             ...mapActions(["FETCH_GRAPH", "FETCH_USER_ARTICLES"]),
+
+            click_checkbox(e, type) {
+              if (this.filter.selected === type)
+                e.preventDefault();
+              this.filter.selected = type;
+              document.getElementById('network').scrollTop = 0;
+            },
+
             updateFilter() {
               this.filterShow = false;
               http.post('/api/api.php', {
