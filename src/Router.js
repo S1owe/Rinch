@@ -59,7 +59,7 @@ const router = new VueRouter({
       meta: ["Страница сотрудника"]
     },
     {
-      path: '/team-rating/:id',
+      path: '/team-rating/',
       name: 'team-rating',
       component: TeamRating,
       props: true,

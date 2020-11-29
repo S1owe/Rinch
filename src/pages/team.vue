@@ -1,5 +1,6 @@
 <template>
-  <div class="team">
+  <Loading :times="300" v-if="!is_show" />
+  <div class="team" v-else>
     <div class="team__header">
       <h1 class="team__header-title">{{ name }}</h1>
 
@@ -65,47 +66,51 @@
 import { Network } from "vue-vis-network";
 import { CalendarHeatmap } from "vue-calendar-heatmap";
 import PublicationsBlock from "../components/PublicationsBlock";
+import http from "@/services/httpService";
 
 import people from "../assets/people.png";
+import Loading from "@/components/Loading";
 
 export default {
   name: "Team",
-  components: { CalendarHeatmap, PublicationsBlock, Network },
+  components: {Loading, CalendarHeatmap, PublicationsBlock, Network },
+  props: ['id'],
 
   data() {
     return {
-      name: "Procent",
+      is_show: false,
+      name: "",
 
       topics: [
-        "Сетевое моделирование",
-        "Пространственная эпидемиология",
-        "Транспортные системы",
-        "Artificial Intelligence",
-        "Software",
-        "Hardware and Architecture",
+        // "Сетевое моделирование",
+        // "Пространственная эпидемиология",
+        // "Транспортные системы",
+        // "Artificial Intelligence",
+        // "Software",
+        // "Hardware and Architecture",
       ],
 
       members: [
-        {
-          name: "Митрохин Максим Александрович",
-          position: "Кандидат технических наук Доцент",
-        },
-        {
-          name: "Митрохин Максим Александрович",
-          position: "Доктор технических наук Профессор",
-        },
-        {
-          name: "Митрохин Максим Александрович",
-          position: "Старший научный сотрудник",
-        },
-        {
-          name: "Митрохина Наталья Юрьевна",
-          position: "Кандидат технических наук Доцент",
-        },
+        // {
+        //   name: "Митрохин Максим Александрович",
+        //   position: "Кандидат технических наук Доцент",
+        // },
+        // {
+        //   name: "Митрохин Максим Александрович",
+        //   position: "Доктор технических наук Профессор",
+        // },
+        // {
+        //   name: "Митрохин Максим Александрович",
+        //   position: "Старший научный сотрудник",
+        // },
+        // {
+        //   name: "Митрохина Наталья Юрьевна",
+        //   position: "Кандидат технических наук Доцент",
+        // },
       ],
 
-      description:
-        "Мое исследование сосредоточено на продвижении современных достижений в области планирования эпидемий на основе данных и принятия решений с целью предоставления рекомендаций по оценке и контролю вспышек на основе наилучших имеющихся данных. В частности, я возглавляю работу над интерактивной веб-панелью мониторинга, которую органы общественного здравоохранения, исследователи и широкая общественность во всем мире используют для отслеживания вспышки нового коронавируса в 2020 году.",
+      description: "",
+        // "Мое исследование сосредоточено на продвижении современных достижений в области планирования эпидемий на основе данных и принятия решений с целью предоставления рекомендаций по оценке и контролю вспышек на основе наилучших имеющихся данных. В частности, я возглавляю работу над интерактивной веб-панелью мониторинга, которую органы общественного здравоохранения, исследователи и широкая общественность во всем мире используют для отслеживания вспышки нового коронавируса в 2020 году.",
 
       heatmap: {
         values: [
@@ -127,46 +132,46 @@ export default {
       },
 
       publications: [
-        {
-          date: "2020-9-22",
-          name:
-            "Symmetric guided electromagnetic waves in a shielded slab filled with anisotropic dielectric",
-        },
-        {
-          date: "2020-10-22",
-          name:
-            "Symmetric guided electromagnetic waves in a shielded slab filled with anisotropic dielectric",
-        },
-        {
-          date: "2019-9-22",
-          name:
-            "Symmetric guided electromagnetic waves in a shielded slab filled with anisotropic dielectric",
-        },
-        {
-          date: "2018-10-22",
-          name:
-            "Symmetric guided electromagnetic waves in a shielded slab filled with anisotropic dielectric",
-        },
-        {
-          date: "2020-10-25",
-          name:
-            "Symmetric guided electromagnetic waves in a shielded slab filled with anisotropic dielectric",
-        },
-        {
-          date: "2020-10-22",
-          name:
-            "Symmetric guided electromagnetic waves in a shielded slab filled with anisotropic dielectric",
-        },
-        {
-          date: "2019-10-25",
-          name:
-            "Symmetric guided electromagnetic waves in a shielded slab filled with anisotropic dielectric",
-        },
-        {
-          date: "2019-11-25",
-          name:
-            "Symmetric guided electromagnetic waves in a shielded slab filled with anisotropic dielectric",
-        },
+        // {
+        //   date: "2020-9-22",
+        //   name:
+        //     "Symmetric guided electromagnetic waves in a shielded slab filled with anisotropic dielectric",
+        // },
+        // {
+        //   date: "2020-10-22",
+        //   name:
+        //     "Symmetric guided electromagnetic waves in a shielded slab filled with anisotropic dielectric",
+        // },
+        // {
+        //   date: "2019-9-22",
+        //   name:
+        //     "Symmetric guided electromagnetic waves in a shielded slab filled with anisotropic dielectric",
+        // },
+        // {
+        //   date: "2018-10-22",
+        //   name:
+        //     "Symmetric guided electromagnetic waves in a shielded slab filled with anisotropic dielectric",
+        // },
+        // {
+        //   date: "2020-10-25",
+        //   name:
+        //     "Symmetric guided electromagnetic waves in a shielded slab filled with anisotropic dielectric",
+        // },
+        // {
+        //   date: "2020-10-22",
+        //   name:
+        //     "Symmetric guided electromagnetic waves in a shielded slab filled with anisotropic dielectric",
+        // },
+        // {
+        //   date: "2019-10-25",
+        //   name:
+        //     "Symmetric guided electromagnetic waves in a shielded slab filled with anisotropic dielectric",
+        // },
+        // {
+        //   date: "2019-11-25",
+        //   name:
+        //     "Symmetric guided electromagnetic waves in a shielded slab filled with anisotropic dielectric",
+        // },
       ],
 
       options: {
@@ -178,49 +183,78 @@ export default {
         },
       },
       edges: [
-        { id: 91, from: 1, to: 2, value: 3 },
-        { id: 92, from: 1, to: 9, value: 2 },
-        { id: 93, from: 2, to: 3, value: 1 },
-        { id: 94, from: 2, to: 4, value: 3 },
-        { id: 95, from: 2, to: 5, value: 7 },
-        { id: 96, from: 5, to: 6, value: 2 },
-        { id: 97, from: 5, to: 7, value: 1 },
-        { id: 98, from: 6, to: 8, value: 1 },
-        { id: 99, from: 7, to: 10, value: 4 },
-        { id: 910, from: 1, to: 20, value: 3 },
-        { id: 911, from: 2, to: 9, value: 2 },
-        { id: 912, from: 4, to: 3, value: 1 },
-        { id: 913, from: 14, to: 4, value: 3 },
-        { id: 914, from: 2, to: 15, value: 7 },
-        { id: 915, from: 11, to: 6, value: 2 },
-        { id: 916, from: 19, to: 18, value: 1 },
-        { id: 917, from: 16, to: 8, value: 1 },
-        { id: 918, from: 17, to: 10, value: 4 },
+        // { id: 91, from: 1, to: 2, value: 3 },
+        // { id: 92, from: 1, to: 9, value: 2 },
+        // { id: 93, from: 2, to: 3, value: 1 },
+        // { id: 94, from: 2, to: 4, value: 3 },
+        // { id: 95, from: 2, to: 5, value: 7 },
+        // { id: 96, from: 5, to: 6, value: 2 },
+        // { id: 97, from: 5, to: 7, value: 1 },
+        // { id: 98, from: 6, to: 8, value: 1 },
+        // { id: 99, from: 7, to: 10, value: 4 },
+        // { id: 910, from: 1, to: 20, value: 3 },
+        // { id: 911, from: 2, to: 9, value: 2 },
+        // { id: 912, from: 4, to: 3, value: 1 },
+        // { id: 913, from: 14, to: 4, value: 3 },
+        // { id: 914, from: 2, to: 15, value: 7 },
+        // { id: 915, from: 11, to: 6, value: 2 },
+        // { id: 916, from: 19, to: 18, value: 1 },
+        // { id: 917, from: 16, to: 8, value: 1 },
+        // { id: 918, from: 17, to: 10, value: 4 },
       ],
       nodes: [
-        { id: 1, shape: "image", image: people, label: "Митрохин М.А." },
-        { id: 2, shape: "image", image: people, label: "Митрохина Т.А." },
-        { id: 3, shape: "image", image: people, label: "Балашов М.Ю." },
-        { id: 4, shape: "image", image: people, label: "Дурнев А.Ю." },
-        { id: 5, shape: "image", image: people, label: "Мишутина В.А." },
-        { id: 6, shape: "image", image: people, label: "Татьянена Н.И." },
-        { id: 7, shape: "image", image: people, label: "Шутов П.А." },
-        { id: 8, shape: "image", image: people, label: "Прошин Т.А." },
-        { id: 9, shape: "image", image: people, label: "Прошин Т.А." },
-        { id: 10, shape: "image", image: people, label: "Прошин Т.А." },
-        { id: 11, shape: "image", image: people, label: "Митрохин М.А." },
-        { id: 12, shape: "image", image: people, label: "Митрохина Т.А." },
-        { id: 13, shape: "image", image: people, label: "Балашов М.Ю." },
-        { id: 14, shape: "image", image: people, label: "Дурнев А.Ю." },
-        { id: 15, shape: "image", image: people, label: "Мишутина В.А." },
-        { id: 16, shape: "image", image: people, label: "Татьянена Н.И." },
-        { id: 17, shape: "image", image: people, label: "Шутов П.А." },
-        { id: 18, shape: "image", image: people, label: "Прошин Т.А." },
-        { id: 19, shape: "image", image: people, label: "Прошин Т.А." },
-        { id: 20, shape: "image", image: people, label: "Прошин Т.А." },
+        // { id: 1, shape: "image", image: people, label: "Митрохин М.А." },
+        // { id: 2, shape: "image", image: people, label: "Митрохина Т.А." },
+        // { id: 3, shape: "image", image: people, label: "Балашов М.Ю." },
+        // { id: 4, shape: "image", image: people, label: "Дурнев А.Ю." },
+        // { id: 5, shape: "image", image: people, label: "Мишутина В.А." },
+        // { id: 6, shape: "image", image: people, label: "Татьянена Н.И." },
+        // { id: 7, shape: "image", image: people, label: "Шутов П.А." },
+        // { id: 8, shape: "image", image: people, label: "Прошин Т.А." },
+        // { id: 9, shape: "image", image: people, label: "Прошин Т.А." },
+        // { id: 10, shape: "image", image: people, label: "Прошин Т.А." },
+        // { id: 11, shape: "image", image: people, label: "Митрохин М.А." },
+        // { id: 12, shape: "image", image: people, label: "Митрохина Т.А." },
+        // { id: 13, shape: "image", image: people, label: "Балашов М.Ю." },
+        // { id: 14, shape: "image", image: people, label: "Дурнев А.Ю." },
+        // { id: 15, shape: "image", image: people, label: "Мишутина В.А." },
+        // { id: 16, shape: "image", image: people, label: "Татьянена Н.И." },
+        // { id: 17, shape: "image", image: people, label: "Шутов П.А." },
+        // { id: 18, shape: "image", image: people, label: "Прошин Т.А." },
+        // { id: 19, shape: "image", image: people, label: "Прошин Т.А." },
+        // { id: 20, shape: "image", image: people, label: "Прошин Т.А." },
       ],
     };
   },
+  created() {
+    http.post('api/api.php', {
+      module: 'get_team',
+      id: this.id
+    }).then(response => {
+      console.log(response.data);
+      this.name = response.data.info.title;
+      this.topics = response.data.topics;
+      this.members = response.data.members;
+      this.description = response.data.info.description;
+      this.publications = response.data.activity.map(a => {
+        return {
+          id: a.id,
+          name: a.title,
+          date: a.year
+        }
+      });
+      this.nodes = response.data.nodes.map(n => {
+        return {
+          id: n.id,
+          label: n.label,
+          shape: "image",
+          image: people
+        }
+      });
+      this.edges = response.data.edges;
+      this.is_show = true;
+    });
+  }
 };
 </script>
 

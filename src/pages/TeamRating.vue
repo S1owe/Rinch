@@ -8,33 +8,36 @@
       <div class="team-rating__input-wrap">
         <span class="team-rating__input-label">Введите название команды</span>
 
-        <b-input-group class="team-rating__input-group">
-          <template #append>
-            <div class="team-rating__input-icon">
-              <svg
-                width="32"
-                height="32"
-                viewBox="0 0 32 32"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  fill-rule="evenodd"
-                  clip-rule="evenodd"
-                  d="M13.3334 24.0001C7.44238 24.0001 2.66675 19.2245 2.66675 13.3334C2.66675 7.44238 7.44238 2.66675 13.3334 2.66675C19.2245 2.66675 24.0001 7.44238 24.0001 13.3334C24.0001 15.7984 23.164 18.068 21.7599 19.8743L28.9429 27.0572L27.0573 28.9429L19.8743 21.7599C18.068 23.164 15.7984 24.0001 13.3334 24.0001ZM21.3334 13.3334C21.3334 17.7517 17.7517 21.3334 13.3334 21.3334C8.91514 21.3334 5.33342 17.7517 5.33342 13.3334C5.33342 8.91514 8.91514 5.33341 13.3334 5.33341C17.7517 5.33341 21.3334 8.91514 21.3334 13.3334Z"
-                  fill="#2F73EA"
-                />
-              </svg>
-            </div>
-          </template>
+        <div class="d-flex">
+          <b-input-group class="team-rating__input-group">
+            <template #append>
+              <div class="team-rating__input-icon">
+                <svg
+                  width="32"
+                  height="32"
+                  viewBox="0 0 32 32"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                    d="M13.3334 24.0001C7.44238 24.0001 2.66675 19.2245 2.66675 13.3334C2.66675 7.44238 7.44238 2.66675 13.3334 2.66675C19.2245 2.66675 24.0001 7.44238 24.0001 13.3334C24.0001 15.7984 23.164 18.068 21.7599 19.8743L28.9429 27.0572L27.0573 28.9429L19.8743 21.7599C18.068 23.164 15.7984 24.0001 13.3334 24.0001ZM21.3334 13.3334C21.3334 17.7517 17.7517 21.3334 13.3334 21.3334C8.91514 21.3334 5.33342 17.7517 5.33342 13.3334C5.33342 8.91514 8.91514 5.33341 13.3334 5.33341C17.7517 5.33341 21.3334 8.91514 21.3334 13.3334Z"
+                    fill="#2F73EA"
+                  />
+                </svg>
+              </div>
+            </template>
 
-          <b-form-input
-            @change="change"
-            v-model="team"
-            placeholder="Введите название команды"
-            class="team-rating__input"
-          ></b-form-input>
-        </b-input-group>
+            <b-form-input
+              @keydown.enter="change"
+              v-model="team"
+              placeholder="Введите название команды"
+              class="team-rating__input"
+            ></b-form-input>
+          </b-input-group>
+          <b-button variant="outline-info" class="ml-3" @click="change">Поиск</b-button>
+        </div>
       </div>
 
       <div class="team-rating__create-btn-wrap">
@@ -45,22 +48,33 @@
     </div>
 
     <div class="team-rating__table">
-      <b-table striped hover :items="table.items" :fields="table.fields">
-        <!-- <template #cell(position)="data">
-          {{ data.item.rating }}
-        </template> -->
-      </b-table>
+      <transition name="global" mode="out-in" appear>
+        <b-table striped hover :items="table.items" :fields="table.fields" v-if="is_show"
+                 @row-clicked="$router.push({name: 'team', params: {id: $event.id}})" :selectable="true">
+          <!-- <template #cell(position)="data">
+            {{ data.item.rating }}
+          </template> -->
+        </b-table>
+      </transition>
     </div>
+
+    <ModalCreateCommand v-model="is_show_modal" @send="create_team" />
   </div>
 </template>
 
 <script>
+
+import http from "@/services/httpService";
+import ModalCreateCommand from "@/components/ModalCreateCommand";
+
 export default {
   name: "TeamRating",
-
+  components: {ModalCreateCommand},
   data() {
     return {
       team: "",
+      is_show_modal: false,
+      is_show: false,
 
       table: {
         fields: [
@@ -72,13 +86,14 @@ export default {
         ],
 
         items: [
-          {
+/*          {
             position: 1,
             name: "Procent",
             researchArea:
               "Антенны на основе периодических структур, Электромагнитные состояния в 2D-наноструктурах и материалах",
             publicationsCount: 25,
             rating: 100,
+            id: 5
           },
           {
             position: 2,
@@ -103,20 +118,62 @@ export default {
               "Антенны на основе периодических структур, Электромагнитные состояния в 2D-наноструктурах и материалах",
             publicationsCount: 25,
             rating: 76,
-          },
+          },*/
         ],
       },
     };
   },
 
   methods: {
-    change(value) {
-      console.log(value);
+    create_team: function (team_info) {
+      http.post('api/api.php', {
+        module: 'create_team',
+        title: team_info.name,
+        description: team_info.description,
+        topics: team_info.select_theme,
+        users: team_info.result_command.map(a => a.id)
+      }).then(response => {
+        this.table.items.push({
+          position: this.table.items.length+1,
+          name: response.data.title,
+          researchArea: response.data.topic,
+          rating: response.data.rating,
+          publicationsCount: response.data.count,
+          id: response.data.id
+        });
+      });
+    },
+    change() {
+      this.loadData();
     },
     handleCreateTeam() {
-      console.log("create team");
+      this.is_show_modal = true;
     },
+    loadData: function (query = this.team) {
+      this.is_show = false;
+      http.post('api/api.php', {
+        module: 'teams',
+        query: query
+      }).then((response) => {
+        let position = 1;
+        this.table.items.splice(0, this.table.items.length);
+        this.table.items = response.data.teams.map((t) => {
+          return {
+            position: position++,
+            name: t.title,
+            researchArea: t.topic,
+            publicationsCount: t.count,
+            rating: t.rating,
+            id: t.id
+          }
+        });
+        this.is_show = true;
+      });
+    }
   },
+  created() {
+    this.loadData('Pro');
+  }
 };
 </script>
 

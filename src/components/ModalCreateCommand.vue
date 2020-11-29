@@ -3,96 +3,103 @@
     <template #modal-header><div></div></template>
 
     <template #default="{ok}">
-      <div class="d-flex flex-column">
-        <button @click="ok()" class="close-btn">
-          <svg width="46" height="46" viewBox="0 0 46 46" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path fill-rule="evenodd" clip-rule="evenodd" d="M22.6277 20.7418L31.1129 12.2565L32.9986 14.1422L24.5133 22.6274L32.9986 31.1127L31.1129 32.9983L22.6277 24.5131L14.1424 32.9983L12.2568 31.1127L20.742 22.6274L12.2568 14.1422L14.1424 12.2565L22.6277 20.7418Z" fill="#2F73EA"/>
-          </svg>
-        </button>
-        <div class="head">
-          <h2>Создание команды</h2>
-        </div>
-        <span class="title">Название</span>
-        <input type="text" placeholder="Название" v-model="name" />
-        <span class="title">Описание</span>
-        <textarea placeholder="Описание" v-model="name" ></textarea>
-        <span class="title">Темы исследований</span>
-        <b-checkbox-group class="d-flex flex-column researching" :class="{active: is_show_all_thees}" v-model="select_theme">
-          <b-check v-for="theme in themes" :key="theme.value" :value="theme.value">{{theme.text}}</b-check>
-        </b-checkbox-group>
-        <span class="title" style="font-size: 16px; cursor: pointer;" @click="is_show_all_thees = !is_show_all_thees">{{is_show_all_thees ? 'Скрыть' : 'Показать все'}}</span>
-        <div class="search-authors d-flex flex-column">
-          <div class="d-flex select-type">
-            <button class="w-50" :class="{active: is_search_manual}" @click="is_search_manual = true">Поиск участников</button>
-            <button class="w-50" :class="{active: !is_search_manual}" @click="is_search_manual = false">Сгенерировать команду</button>
+      <transition name="global" mode="out-in" appear>
+        <Loading v-if="!is_show" />
+        <div v-else class="d-flex flex-column">
+          <button @click="ok()" class="close-btn">
+            <svg width="46" height="46" viewBox="0 0 46 46" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M22.6277 20.7418L31.1129 12.2565L32.9986 14.1422L24.5133 22.6274L32.9986 31.1127L31.1129 32.9983L22.6277 24.5131L14.1424 32.9983L12.2568 31.1127L20.742 22.6274L12.2568 14.1422L14.1424 12.2565L22.6277 20.7418Z" fill="#2F73EA"/>
+            </svg>
+          </button>
+          <div class="head">
+            <h2>Создание команды</h2>
           </div>
-          <transition name="global" mode="out-in" appear>
-            <div class="table-container" :key="is_search_manual">
-              <div class="search w-100" v-if="is_search_manual">
-                <input type="text" class="w-100" placeholder="Введите  ФИО или ID участника" v-model="search_authors">
-                <button>
-                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path fill-rule="evenodd" clip-rule="evenodd" d="M8.33366 14.9998C4.65176 14.9998 1.66699 12.0151 1.66699 8.33317C1.66699 4.65127 4.65176 1.6665 8.33366 1.6665C12.0156 1.6665 15.0003 4.65127 15.0003 8.33317C15.0003 9.87376 14.4778 11.2923 13.6002 12.4212L18.0896 16.9106L16.9111 18.0891L12.4217 13.5997C11.2928 14.4773 9.87425 14.9998 8.33366 14.9998ZM13.3337 8.33317C13.3337 11.0946 11.0951 13.3332 8.33366 13.3332C5.57224 13.3332 3.33366 11.0946 3.33366 8.33317C3.33366 5.57175 5.57224 3.33317 8.33366 3.33317C11.0951 3.33317 13.3337 5.57175 13.3337 8.33317Z" fill="#7C8793" fill-opacity="0.5"/>
-                  </svg>
-                </button>
-              </div>
-              <div class="search w-100 d-flex" v-else>
-                <span class="mr-2" style="color: #7C8793;">Кол-во участников: </span>
-                <input type="text" style="width: 60px; padding: 0;" v-model="count_authors" />
-              </div>
-              <table class="text-center w-100" v-if="search_table_users.length > 0">
-                <tr>
-                  <th>№</th>
-                  <th>ФИО</th>
-                  <th>Рейтинг</th>
-                  <th></th>
-                </tr>
-                <tr v-for="(user, index) in search_table_users" :key="user.id">
-                  <td>{{index+1}}</td>
-                  <td class="text-left">{{user.name}}</td>
-                  <td>{{user.rating}}</td>
-                  <td>
-                    <button @click="add_command(user)">
-                      <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path fill-rule="evenodd" clip-rule="evenodd" d="M6.5 5.5H11V6.5H6.5V11H5.5V6.5H1V5.5H5.5V1H6.5V5.5Z" fill="#0094FF"/>
-                      </svg>
-                    </button>
-                  </td>
-                </tr>
-              </table>
-              <span class="title text-right" style="font-size: 12px; cursor: pointer; display: block; margin-top: 10px;"
-                    v-if="!is_include_current_author"
-                    @click="add_current_author">Добавить меня</span>
+          <span class="title">Название</span>
+          <input type="text" placeholder="Название" v-model="name" />
+          <span class="title">Описание</span>
+          <textarea placeholder="Описание" v-model="description" ></textarea>
+          <span class="title">Темы исследований</span>
+          <b-checkbox-group class="d-flex flex-column researching" :class="{active: is_show_all_thees}" v-model="select_theme">
+            <b-check v-for="theme in themes" :key="theme.value" :value="theme.value">{{theme.text}}</b-check>
+          </b-checkbox-group>
+          <span class="title" style="font-size: 16px; cursor: pointer;" @click="is_show_all_thees = !is_show_all_thees">{{is_show_all_thees ? 'Скрыть' : 'Показать все'}}</span>
+          <div class="search-authors d-flex flex-column">
+            <div class="d-flex select-type">
+              <button class="w-50" :class="{active: is_search_manual}" @click="is_search_manual = true">Поиск участников</button>
+              <button class="w-50" :class="{active: !is_search_manual}" @click="is_search_manual = false">Сгенерировать команду</button>
             </div>
-          </transition>
-        </div>
-        <div class="search-authors result d-flex flex-column">
-          <div class="table-container">
-            <span class="title" style="font-size: 16px; margin-bottom: 8px; display: inline-block">Итоговая команда:</span>
-            <table class="text-center w-100" v-if="result_command.length > 0">
-              <tr>
-                <th>№</th>
-                <th>ФИО</th>
-                <th>Рейтинг</th>
-                <th></th>
-              </tr>
-              <tr v-for="(user, index) in result_command" :key="user.id">
-                <td>{{index+1}}</td>
-                <td class="text-left">{{user.name}}</td>
-                <td>{{user.rating}}</td>
-                <td>
-                  <button @click="remove_command(user)">
-                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path fill-rule="evenodd" clip-rule="evenodd" d="M11 5.5V6.5H1V5.5H11Z" fill="#FF0000"/>
+            <transition name="global" mode="out-in" appear>
+              <Loading v-if="!is_load_table" />
+              <div class="table-container" v-else :key="is_search_manual">
+                <div class="search w-100" v-if="is_search_manual">
+                  <input type="text" class="w-100" placeholder="Введите  ФИО или ID участника" @keydown.enter="search" v-model="search_authors">
+                  <button @click="search">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path fill-rule="evenodd" clip-rule="evenodd" d="M8.33366 14.9998C4.65176 14.9998 1.66699 12.0151 1.66699 8.33317C1.66699 4.65127 4.65176 1.6665 8.33366 1.6665C12.0156 1.6665 15.0003 4.65127 15.0003 8.33317C15.0003 9.87376 14.4778 11.2923 13.6002 12.4212L18.0896 16.9106L16.9111 18.0891L12.4217 13.5997C11.2928 14.4773 9.87425 14.9998 8.33366 14.9998ZM13.3337 8.33317C13.3337 11.0946 11.0951 13.3332 8.33366 13.3332C5.57224 13.3332 3.33366 11.0946 3.33366 8.33317C3.33366 5.57175 5.57224 3.33317 8.33366 3.33317C11.0951 3.33317 13.3337 5.57175 13.3337 8.33317Z" fill="#7C8793" fill-opacity="0.5"/>
                     </svg>
                   </button>
-                </td>
-              </tr>
-            </table>
+                </div>
+                <div class="search w-100 d-flex" v-else>
+                  <span class="mr-2" style="color: #7C8793;">Кол-во участников: </span>
+                  <input type="text" style="width: 60px; padding: 0;" v-model="count_authors" @keydown.enter="getCommand" />
+                  <b-button variant="outline-info" @click="getCommand" class="ml-2">Поиск</b-button>
+                </div>
+                <table class="text-center w-100" v-if="search_table_users.length > 0">
+                  <tr>
+                    <th>№</th>
+                    <th>ФИО</th>
+                    <th>Рейтинг</th>
+                    <th></th>
+                  </tr>
+                  <tr v-for="(user, index) in search_table_users" :key="user.id">
+                    <td>{{index+1}}</td>
+                    <td class="text-left">{{user.name}}</td>
+                    <td>{{user.rating}}</td>
+                    <td>
+                      <button @click="add_command(user)">
+                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path fill-rule="evenodd" clip-rule="evenodd" d="M6.5 5.5H11V6.5H6.5V11H5.5V6.5H1V5.5H5.5V1H6.5V5.5Z" fill="#0094FF"/>
+                        </svg>
+                      </button>
+                    </td>
+                  </tr>
+                </table>
+                <span class="title text-right" style="font-size: 12px; cursor: pointer; display: block; margin-top: 10px;"
+                      v-if="!is_include_current_author"
+                      @click="add_current_author">Добавить меня</span>
+              </div>
+            </transition>
           </div>
+          <transition name="global" mode="out-in" appear>
+            <div class="search-authors result d-flex flex-column" v-if="result_command.length > 0">
+              <div class="table-container">
+                <span class="title" style="font-size: 16px; margin-bottom: 8px; display: inline-block">Итоговая команда:</span>
+                <table class="text-center w-100">
+                  <tr>
+                    <th>№</th>
+                    <th>ФИО</th>
+                    <th>Рейтинг</th>
+                    <th></th>
+                  </tr>
+                  <tr v-for="(user, index) in result_command" :key="user.id">
+                    <td>{{index+1}}</td>
+                    <td class="text-left">{{user.name}}</td>
+                    <td>{{user.rating}}</td>
+                    <td>
+                      <button @click="remove_command(user)">
+                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path fill-rule="evenodd" clip-rule="evenodd" d="M11 5.5V6.5H1V5.5H11Z" fill="#FF0000"/>
+                        </svg>
+                      </button>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+          </transition>
+          <button class="create-command mx-auto" @click="send">Создать команду</button>
         </div>
-        <button class="create-command mx-auto" @click="send">Создать команду</button>
-      </div>
+      </transition>
     </template>
 
     <template #modal-footer><div></div></template>
@@ -100,49 +107,98 @@
 </template>
 
 <script>
+
+import http from "@/services/httpService";
+import Loading from "@/components/Loading";
+import {notify} from "@/const";
+
 export default {
   name: "ModalCreateCommand",
+  components: {Loading},
   props: ['value'],
   data: function () {
     return {
+      is_show: false,
       name: '',
+      description: '',
       themes: [
-        {text: 'Транспортные системы', value: 1},
-        {text: 'Сетевое моделирование', value: 2},
-        {text: 'Пространственная эпидемиология', value: 3},
-        {text: 'Software', value: 4},
-        {text: 'Artificial intellegence', value: 5},
-        {text: 'Mathematics', value: 6},
-        {text: 'Media and communication', value: 7},
-        {text: 'Art', value: 8}
+        // {text: 'Транспортные системы', value: 1},
+        // {text: 'Сетевое моделирование', value: 2},
+        // {text: 'Пространственная эпидемиология', value: 3},
+        // {text: 'Software', value: 4},
+        // {text: 'Artificial intellegence', value: 5},
+        // {text: 'Mathematics', value: 6},
+        // {text: 'Media and communication', value: 7},
+        // {text: 'Art', value: 8}
       ],
       select_theme: [],
       is_show_all_thees: false,
       is_search_manual: true,
       search_table_users: [
-        {id: 1, name: 'Митрохин Михаил Александрович', rating: 100},
-        {id: 2, name: 'Митрохин Михаил Александрович', rating: 96},
-        {id: 3, name: 'Митрохин Михаил Александрович', rating: 82}
+        // {id: 1, name: 'Митрохин Михаил Александрович', rating: 100},
+        // {id: 2, name: 'Митрохин Михаил Александрович', rating: 96},
+        // {id: 3, name: 'Митрохин Михаил Александрович', rating: 82}
       ],
       result_command: [
-        {id: 4, name: 'Митрохин Михаил Александрович', rating: 72},
-        {id: 5, name: 'Митрохин Михаил Александрович', rating: 68},
-        {id: 6, name: 'Митрохин Михаил Александрович', rating: 54}
+        // {id: 4, name: 'Митрохин Михаил Александрович', rating: 72},
+        // {id: 5, name: 'Митрохин Михаил Александрович', rating: 68},
+        // {id: 6, name: 'Митрохин Михаил Александрович', rating: 54}
       ],
-      count_authors: 0,
+      count_authors: 5,
       search_authors: '',
       this_author: {id: 9, name: 'Текущий автор', rating: 46},
-      is_include_current_author: false
+      is_include_current_author: false,
+      is_load_table: true
     }
   },
   watch: {
-    is_search_manual: function () {
+    is_search_manual: function (val) {
       this.is_include_current_author =
           !(this.search_table_users.findIndex(s => s.id === this.this_author.id) === -1 &&
           this.result_command.findIndex(s => s.id === this.this_author.id) === -1);
+      this.search_authors = '';
+      this.search_table_users = [];
+      if (!val && this.select_theme.length > 0)
+        this.getCommand();
     }
   },
   methods: {
+    getCommand: function () {
+      if (this.select_theme.length <= 0) {
+        notify('Выберите хотя-бы 1 категорию!', 'error');
+        return ;
+      }
+      this.is_load_table = false;
+      http.post('api/api2.php', {
+        module: 'get_rating',
+        types: this.select_theme,
+        count: this.count_authors
+      }).then(response => {
+        this.is_load_table = true;
+        console.log(response.data);
+        this.search_table_users = response.data.authors.map(a => {
+          return {
+            id: a.id,
+            name: a.name,
+            rating: Math.round(a.rating * 100) / 100
+          }
+        });
+      });
+    },
+    search: function () {
+      http.post('api/api.php', {
+        module: 'search',
+        query: this.search_authors
+      }).then(response => {
+        this.search_table_users = response.data.users.map(m => {
+          return {
+            id: m.id,
+            name: m.name,
+            rating: m.rating
+          }
+        });
+      });
+    },
     add_current_author() {
       if (this.is_include_current_author)
         return;
@@ -150,8 +206,24 @@ export default {
       this.search_table_users.push(this.this_author);
     },
     send: function () {
+      let error = false;
+      if (this.name === '') {
+        notify('Заполните название команды!', 'error');
+        error = true;
+      }
+      if (this.description === '') {
+        notify('Заполните описание!', 'error');
+        error = true;
+      }
+      if (this.result_command.length === 0) {
+        notify('В команде должны быть авторы!', 'error');
+        error = true;
+      }
+      if (error)
+        return;
       this.$emit('send', {
         name: this.name,
+        description: this.description,
         select_theme: this.select_theme,
         result_command: this.result_command
       });
@@ -179,6 +251,29 @@ export default {
         this.$emit('input', val);
       }
     }
+  },
+  created() {
+    http.post('api/api.php?PHPSESSID=' + this.$store.state.user.token, {
+      module: 'check_auth'
+    }).then(response => {
+      this.this_author = {
+        id: response.data.id,
+        name: response.data.name,
+        rating: response.data.rating
+      };
+    });
+
+    http.post('api/api.php', {
+      module: 'get_types'
+    }).then(response => {
+      this.themes = response.data.types.map(t => {
+        return {
+          text: t.name,
+          value: t.id
+        }
+      });
+      this.is_show = true;
+    });
   }
 }
 </script>
@@ -190,16 +285,6 @@ export default {
   background: #F9F9FA;
   border: 2px solid #E5E7E9;
   border-radius: 0;
-
-  .global-enter-active, .global-leave-active {
-    transition: opacity .3s ease;
-  }
-
-  .global-enter, .global-leave-to
-    /* .component-fade-leave-active до версии 2.1.8 */
-  {
-    opacity: 0 !important;
-  }
 
   .modal-content {
     border-radius: 0;
@@ -287,12 +372,14 @@ export default {
           background-color: white;
           border: 1px solid #E5E7E9;
           padding: 20px;
+          max-height: 350px;
+          overflow-y: auto;
 
           .search {
             margin-bottom: 8px;
             position: relative;
 
-            button {
+            button:not(.btn) {
               position: absolute;
               border: 0;
               right: 0;

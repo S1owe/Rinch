@@ -1,7 +1,9 @@
 <template>
   <div id="app" class="b-flex flex-column justify-content-between">
     <Header v-if="!isAuth" />
-    <router-view class="component flex-grow-1" :key="$route.path" />
+    <transition name="global" mode="out-in" appear>
+      <router-view class="component flex-grow-1" :key="$route.path" />
+    </transition>
     <Footer v-if="!isAuth" />
   </div>
 </template>
@@ -57,8 +59,38 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
+@import '~@/../node_modules/noty/lib/noty.css';
+@import "~@/../node_modules/noty/lib/themes/metroui.css";
 #app {
   position: relative;
+}
+
+body {
+  min-width: 1617px;
+}
+
+.btn-outline-info {
+  color: #2f73ea !important;
+  border-color: #2f73ea !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  border-width: 2px !important;
+  font-weight: bold !important;
+}
+
+.btn-outline-info:hover {
+  background-color: #2f73ea !important;
+  color: white !important;
+}
+
+.global-enter-active, .global-leave-active {
+  transition: opacity .3s ease;
+}
+
+.global-enter, .global-leave-to
+  /* .component-fade-leave-active до версии 2.1.8 */
+{
+  opacity: 0 !important;
 }
 </style>
